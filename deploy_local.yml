@@ -17,6 +17,7 @@ services:
   # RabbitMQ
   rabbitmq:
     image: rabbitmq
+    hostname: rabbitmq
     env_file: .env
     expose:
       - "5672"  # we forward this port because it's useful for debugging
@@ -25,11 +26,15 @@ services:
       - rabbitmq:/var/lib/rabbitmq
 
   # Celery worker
-  worker: &app_base
-    build: ./backend
+  worker: #&app_base
+    image: boilerplate_backend
+    #build: ./backend
     container_name: ${PROJ_NAME}_worker
-    #command: bash -c "sleep 5 && celery -A backend worker -l info --beat --scheduler django_celery_beat.schedulers:DatabaseScheduler" #  --scheduler django_celery_beat.schedulers:DatabaseScheduler
-    command: bash -c "sleep 5 && celery -A backend beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler"
+    command: bash -c "sleep 15 && celery -A backend worker -l info --beat --scheduler django_celery_beat.schedulers:DatabaseScheduler" #  --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    #command: bash -c "sleep 140 && celery -A backend beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler"
+    #links:
+    #  - db
+    #  - rabbitmq
     volumes:
       - ./backend:/usr/src/app
     depends_on:
@@ -41,19 +46,21 @@ services:
 
   # Django Backend
   backend: 
-    <<: *app_base
+    #<<: *app_base
+    image: boilerplate_backend
     container_name: ${PROJ_NAME}_backend
-    command: bash -c "sleep 5 && sh /usr/src/app/run.sh"
+    command: bash -c "sleep 20 && sh /usr/src/app/run.sh"
     env_file: .env
+    volumes:
+      - ./backend:/usr/src/app
+    depends_on:
+      - rabbitmq
+      - db
     environment:
       - ENVIRONMENT=local
       - DJANGO_DEBUG=True
     ports:
       - "8000:8000"
-    links:
-      - db
-    depends_on:
-      - db
 
 volumes:
   database:
