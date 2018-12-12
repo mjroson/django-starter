@@ -1,0 +1,99 @@
+version: '3.1'
+services:
+  db:
+    image: postgres:9
+    env_file: .env
+    container_name: ${PROJ_NAME}_db
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+      - POSTGRES_DB=${DB_NAME}
+    ports:
+      - ${DB_PORT}:${DB_PORT}
+    volumes:
+      - database:/var/lib/postgresql/data
+    networks:
+      - backend
+  backend: &app_base
+    image: ${PROJ_NAME}_backend
+    container_name: ${PROJ_NAME}_backend
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    command: bash -c "sleep 10 && sh run.sh"
+    env_file: .env
+    volumes:
+      - .:/usr/src/app
+    expose:
+      - "8000"
+    links:
+      - db
+    depends_on:
+      - db
+    networks:
+      - backend
+  # RabbitMQ
+  rabbitmq:
+    image: rabbitmq
+    env_file: .env
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    networks:
+      - backend
+    volumes:
+      - rabbitmq:/var/lib/rabbitmq
+
+  # Celery worker
+  worker:
+    <<: *app_base
+    container_name: ${PROJ_NAME}_worker
+    deploy:
+      replicas: 
+1      restart_policy:
+        condition: on-failure
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+    command: bash -c "sleep 5 && celery -A backend worker -l info --beat" #  --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    volumes:
+      - ./backend:/usr/src/app
+    depends_on:
+      - rabbitmq
+      - db
+    env_file: .env
+    environment:
+      - C_FORCE_ROOT=true
+    networks:
+      - backend
+
+  nginx:
+    build: ./nginx
+    container_name: ${PROJ_NAME}_nginx
+    env_file: .env
+    ports:
+      - "443:443"
+      - "80:80"
+    links:
+      - backend
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    command: /bin/bash -c "envsubst '$$HOST_NAME' < /etc/nginx/conf.d/site.template > /etc/nginx/conf.d/site.conf && sleep 5 && nginx -g 'daemon off;'"
+    volumes:
+      - ./logs/nginx:/tmp/logs
+      - ./static:/opt/app/static
+      - ./media:/opt/app/media
+      - ./nginx/site.conf:/etc/nginx/conf.d/site.template
+      - nginx-certs:/etc/nginx/certs
+    depends_on:
+      - backend
+
+volumes:
+  database:
+  nginx-certs:

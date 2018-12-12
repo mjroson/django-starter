@@ -1,0 +1,60 @@
+version: '3.1'
+services:
+  # Postgresql DB
+  db:
+    image: postgres:latest
+    env_file: .env
+    container_name: ${PROJ_NAME}_db
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+      - POSTGRES_DB=${DB_NAME}
+    ports:
+      - ${DB_PORT}:${DB_PORT}
+    volumes:
+      - database:/var/lib/postgresql/data
+  
+  # RabbitMQ
+  rabbitmq:
+    image: rabbitmq
+    env_file: .env
+    expose:
+      - "5672"  # we forward this port because it's useful for debugging
+      - "15672"  # here, we can access rabbitmq management plugin
+    volumes:
+      - rabbitmq:/var/lib/rabbitmq
+
+  # Celery worker
+  worker: &app_base
+    build: ./backend
+    container_name: ${PROJ_NAME}_worker
+    #command: bash -c "sleep 5 && celery -A backend worker -l info --beat --scheduler django_celery_beat.schedulers:DatabaseScheduler" #  --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    command: bash -c "sleep 5 && celery -A backend beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler"
+    volumes:
+      - ./backend:/usr/src/app
+    depends_on:
+      - rabbitmq
+      - db
+    env_file: .env
+    environment:
+      - C_FORCE_ROOT=true
+
+  # Django Backend
+  backend: 
+    <<: *app_base
+    container_name: ${PROJ_NAME}_backend
+    command: bash -c "sleep 5 && sh /usr/src/app/run.sh"
+    env_file: .env
+    environment:
+      - ENVIRONMENT=local
+      - DJANGO_DEBUG=True
+    ports:
+      - "8000:8000"
+    links:
+      - db
+    depends_on:
+      - db
+
+volumes:
+  database:
+  rabbitmq:   
