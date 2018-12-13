@@ -30,8 +30,11 @@ services:
     image: boilerplate_backend
     #build: ./backend
     container_name: ${PROJ_NAME}_worker
-    command: bash -c "sleep 15 && celery -A backend worker -l info --beat --scheduler django_celery_beat.schedulers:DatabaseScheduler" #  --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    command: bash -c "sleep 5 && celery -A backend worker -l info --beat --scheduler django_celery_beat.schedulers:DatabaseScheduler" #  --scheduler django_celery_beat.schedulers:DatabaseScheduler
     #command: bash -c "sleep 140 && celery -A backend beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler"
+    env_file: .env
+    environment:
+      - C_FORCE_ROOT=true
     #links:
     #  - db
     #  - rabbitmq
@@ -40,25 +43,23 @@ services:
     depends_on:
       - rabbitmq
       - db
-    env_file: .env
-    environment:
-      - C_FORCE_ROOT=true
-
+    
   # Django Backend
   backend: 
     #<<: *app_base
     image: boilerplate_backend
     container_name: ${PROJ_NAME}_backend
-    command: bash -c "sleep 20 && sh /usr/src/app/run.sh"
+    command: bash -c "sleep 10 && sh run.sh"
+    #command: bash -c "sleep 120 && python manage.py runserver 0.0.0.0:8000"
     env_file: .env
+    environment:
+      - ENVIRONMENT=local
+      - DJANGO_DEBUG=True
     volumes:
       - ./backend:/usr/src/app
     depends_on:
       - rabbitmq
       - db
-    environment:
-      - ENVIRONMENT=local
-      - DJANGO_DEBUG=True
     ports:
       - "8000:8000"
 

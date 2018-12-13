@@ -11,24 +11,30 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
-
+from apps.core.utils import get_value_env as env
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'rx6jp(x@_ace99#xtqs!gmati39+xs@3(75qk56fgbg3%mi==@'
+if not env('SECRET_KEY'):
+    warnings.warn((
+                      "Please define SECRET_KEY before importing {0}, as a fallback "
+                      "for when the environment variable is not available."
+                  ).format(__name__))
+else:
+    SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env("DJANGO_DEBUG", True)
 
 ALLOWED_HOSTS = ['*']
 
 
-# Application definition
+#############################################
+#  Application definition
+#############################################
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -44,6 +50,9 @@ INSTALLED_APPS = [
     'apps.core'
 ]
 
+#############################################
+#  MIDDLEWARE
+#############################################
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -54,8 +63,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'backend.urls'
+#if env("ENVIRONMENT", "local") == 'local':
+#    MIDDLEWARE.append('apps.core.middleware.dev_cors_middleware')
 
+#############################################
+#  TEMPLATES CONFIG
+#############################################
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -72,19 +85,37 @@ TEMPLATES = [
     },
 ]
 
+
 WSGI_APPLICATION = 'backend.wsgi.application'
+ROOT_URLCONF = 'backend.urls'
 
 
+#############################################
+#  DATABASE CONFIG
+#############################################
+DATABASES = {
+    'default': {
+        'ENGINE': os.environ['DB_ENGINE'],
+        'NAME': os.environ['DB_NAME'],
+        'USER': os.environ['DB_USER'],
+        'PASSWORD': os.environ['DB_PASS'],
+        'HOST': os.environ['DB_HOST'],
+        'PORT': os.environ['DB_PORT'],
+    }
+}
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.sqlite3',
+#        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#    }
+#}
 
+#############################################
+#  AUTHENTICATION CONFIG
+#############################################
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
@@ -105,6 +136,9 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+#############################################
+# LOCALES & LANG
+#############################################
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
@@ -118,7 +152,9 @@ USE_L10N = True
 
 USE_TZ = True
 
-
+#############################################
+# STATIC FILES
+#############################################
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
