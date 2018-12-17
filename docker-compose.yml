@@ -1,9 +1,10 @@
-version: '3.1'
+version: '3'
 services:
+  # Postgresql DB
   db:
-    image: postgres:9
-    env_file: .env
+    image: postgres:latest
     container_name: ${PROJ_NAME}_db
+    env_file: .env
     environment:
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASS}
@@ -13,18 +14,64 @@ services:
     volumes:
       - database:/var/lib/postgresql/data
     networks:
-      - backend
-  backend: &app_base
-    image: ${PROJ_NAME}_backend
-    container_name: ${PROJ_NAME}_backend
+      - database
+  
+  # RabbitMQ
+  rabbitmq:
+    image: rabbitmq
+    container_name: ${PROJ_NAME}_rabbitmq
+    hostname: rabbitmq
+    env_file: .env
     deploy:
       replicas: 1
       restart_policy:
         condition: on-failure
+    networks:
+      - task_queque
+    volumes:
+      - rabbitmq:/var/lib/rabbitmq
+
+  # Celery worker
+  worker:
+    image: ${PROJ_NAME}_backend:${IMG_VERSION}
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: ${PROJ_NAME}_worker
+    command: bash -c "sleep 5 && celery -A backend worker -l info --beat" #  --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    env_file: .env
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+    volumes:
+      - ./backend:/usr/src/app
+    depends_on:
+      - rabbitmq
+      - db
+    environment:
+      - C_FORCE_ROOT=true
+    networks:
+      - task_queque
+      - database
+
+  # Django Backend
+  backend:
+    image: ${PROJ_NAME}_backend:${IMG_VERSION}
+    container_name: ${PROJ_NAME}_backend
     command: bash -c "sleep 10 && sh run.sh"
     env_file: .env
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
     volumes:
-      - .:/usr/src/app
+      - ./backend:/usr/src/app
     expose:
       - "8000"
     links:
@@ -33,67 +80,48 @@ services:
       - db
     networks:
       - backend
-  # RabbitMQ
-  rabbitmq:
-    image: rabbitmq
-    env_file: .env
-    deploy:
-      replicas: 1
-      restart_policy:
-        condition: on-failure
-    networks:
-      - backend
-    volumes:
-      - rabbitmq:/var/lib/rabbitmq
+      - task_queque
+      - database
 
-  # Celery worker
-  worker:
-    <<: *app_base
-    container_name: ${PROJ_NAME}_worker
-    deploy:
-      replicas: 
-1      restart_policy:
-        condition: on-failure
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "200k"
-        max-file: "10"
-    command: bash -c "sleep 5 && celery -A backend worker -l info --beat" #  --scheduler django_celery_beat.schedulers:DatabaseScheduler
-    volumes:
-      - ./backend:/usr/src/app
-    depends_on:
-      - rabbitmq
-      - db
-    env_file: .env
-    environment:
-      - C_FORCE_ROOT=true
-    networks:
-      - backend
-
+  # Web server NGINX
   nginx:
     build: ./nginx
     container_name: ${PROJ_NAME}_nginx
     env_file: .env
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & envsubst '$$HOST_NAME $$SUBDOMAIN' < /etc/nginx/conf.d/site.template > /etc/nginx/conf.d/site.conf & nginx -g \"daemon off;\"'"
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
     ports:
       - "443:443"
       - "80:80"
     links:
       - backend
-    deploy:
-      replicas: 1
-      restart_policy:
-        condition: on-failure
-    command: /bin/bash -c "envsubst '$$HOST_NAME' < /etc/nginx/conf.d/site.template > /etc/nginx/conf.d/site.conf && sleep 5 && nginx -g 'daemon off;'"
     volumes:
       - ./logs/nginx:/tmp/logs
       - ./static:/opt/app/static
       - ./media:/opt/app/media
       - ./nginx/site.conf:/etc/nginx/conf.d/site.template
       - nginx-certs:/etc/nginx/certs
+      - ./nginx/certbot/conf:/etc/letsencrypt
+      - ./nginx/certbot/www:/var/www/certbot
     depends_on:
       - backend
+
+  certbot:
+    image: certbot/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+    volumes:
+    - ./nginx/certbot/conf:/etc/letsencrypt
+    - ./nginx/certbot/www:/var/www/certbot
 
 volumes:
   database:
   nginx-certs:
+  rabbitmq:
+
+networks:
+  backend:
+  database:
+  task_queque:

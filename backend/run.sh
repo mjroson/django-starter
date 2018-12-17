@@ -1,16 +1,19 @@
 #!/usr/bin/env bash
 
-[ "$ENVIRONMENT" = local ] &&
+if [ "$ENVIRONMENT" = "local" ]; then
 	echo "[run] make migrations"
 	python3 manage.py makemigrations || exit 1
+fi
 
-#echo "[run] Migrate DB"
+echo "[run] Migrate DB"
 python3 manage.py migrate || exit 1
 
-[ "$ENVIRONMENT" != 'local' ] &&
+if [ "$ENVIRONMENT" != "local" ]; then
 	echo "[run] Collect static files ${ENVIRONMENT}"
 	python3 manage.py collectstatic --noinput
 	chmod -R 777 ./static
+fi
+
 
 echo "[run] Create superuser"
 echo "from django.contrib.auth import get_user_model

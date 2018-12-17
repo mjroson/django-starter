@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 import os
 from apps.core.utils import get_value_env as env
+import warnings
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -63,7 +64,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-#if env("ENVIRONMENT", "local") == 'local':
+# if env("ENVIRONMENT", "local") == 'local':
 #    MIDDLEWARE.append('apps.core.middleware.dev_cors_middleware')
 
 #############################################
@@ -72,7 +73,9 @@ MIDDLEWARE = [
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, "templates"),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -85,33 +88,24 @@ TEMPLATES = [
     },
 ]
 
-
 WSGI_APPLICATION = 'backend.wsgi.application'
 ROOT_URLCONF = 'backend.urls'
 
 
 #############################################
-#  DATABASE CONFIG
+# DATABASE CONFIG
+# https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 #############################################
 DATABASES = {
     'default': {
-        'ENGINE': os.environ['DB_ENGINE'],
-        'NAME': os.environ['DB_NAME'],
-        'USER': os.environ['DB_USER'],
-        'PASSWORD': os.environ['DB_PASS'],
-        'HOST': os.environ['DB_HOST'],
-        'PORT': os.environ['DB_PORT'],
+        'ENGINE': env('DB_ENGINE'),
+        'NAME': env('DB_NAME'),
+        'USER': env('DB_USER'),
+        'PASSWORD': env('DB_PASS'),
+        'HOST': env('DB_HOST'),
+        'PORT': env('DB_PORT'),
     }
 }
-# Database
-# https://docs.djangoproject.com/en/2.1/ref/settings/#databases
-
-#DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.sqlite3',
-#        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#    }
-#}
 
 #############################################
 #  AUTHENTICATION CONFIG
@@ -139,6 +133,7 @@ AUTH_PASSWORD_VALIDATORS = [
 #############################################
 # LOCALES & LANG
 #############################################
+
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
@@ -159,24 +154,27 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "../static")
 
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
 
 ###################################################################
-##### CONFIG CELERY AND RABBITMQ
+# CONFIG CELERY AND RABBITMQ
 ###################################################################
-
-from celery.schedules import crontab
-from datetime import timedelta
 
 BROKER_URL = "amqp://{user}:{password}@rabbitmq:5672//?heartbeat=30".format(
-    user=os.environ.get('RABBITMQ_DEFAULT_USER'),
-    password=os.environ.get('RABBITMQ_DEFAULT_PASS')
+    user=env('RABBITMQ_DEFAULT_USER'),
+    password=env('RABBITMQ_DEFAULT_PASS')
 )
 
 broker_url = BROKER_URL
 
+# from celery.schedules import crontab
+# from datetime import timedelta
 # CELERYBEAT_SCHEDULE = {
-#     'cron_prisma': {
+#     'cron_task': {
 #         'task': 'tasks.prisma_scrapper',
 #         #'schedule': crontab(hour=23, minute=5),
 #         #'schedule': crontab(minute='*/1'),
