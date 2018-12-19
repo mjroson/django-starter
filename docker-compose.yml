@@ -1,6 +1,6 @@
 version: '3'
 services:
-  # Postgresql DB
+  # Postgresql database
   db:
     image: postgres:latest
     container_name: ${PROJ_NAME}_db
@@ -15,8 +15,8 @@ services:
       - database:/var/lib/postgresql/data
     networks:
       - database
-  
-  # RabbitMQ
+
+  # RabbitMQ manager queque
   rabbitmq:
     image: rabbitmq
     container_name: ${PROJ_NAME}_rabbitmq
@@ -34,9 +34,6 @@ services:
   # Celery worker
   worker:
     image: ${PROJ_NAME}_backend:${IMG_VERSION}
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
     container_name: ${PROJ_NAME}_worker
     command: bash -c "sleep 5 && celery -A backend worker -l info --beat" #  --scheduler django_celery_beat.schedulers:DatabaseScheduler
     env_file: .env
@@ -60,7 +57,7 @@ services:
       - task_queque
       - database
 
-  # Django Backend
+  # Django backend
   backend:
     image: ${PROJ_NAME}_backend:${IMG_VERSION}
     container_name: ${PROJ_NAME}_backend
@@ -74,8 +71,6 @@ services:
       - ./backend:/usr/src/app
     expose:
       - "8000"
-    links:
-      - db
     depends_on:
       - db
     networks:
@@ -83,12 +78,23 @@ services:
       - task_queque
       - database
 
-  # Web server NGINX
+  # Build dynamic configuration for nginx
+  nginx_template:
+    image: nginx:latest
+    container_name: ${PROJ_NAME}_nginx_template
+    env_file: .env
+    entrypoint: /bin/bash -c "envsubst '$$HOST_NAME' < /etc/nginx/conf.d/site.template > /etc/nginx/conf.d/site.conf"
+    volumes:
+      - ./nginx/conf:/etc/nginx/conf.d
+    networks:
+      - backend
+
+  # Web server/proxy
   nginx:
-    build: ./nginx
+    image: nginx:latest
     container_name: ${PROJ_NAME}_nginx
     env_file: .env
-    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & envsubst '$$HOST_NAME $$SUBDOMAIN' < /etc/nginx/conf.d/site.template > /etc/nginx/conf.d/site.conf & nginx -g \"daemon off;\"'"
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
     deploy:
       replicas: 1
       restart_policy:
@@ -96,29 +102,32 @@ services:
     ports:
       - "443:443"
       - "80:80"
-    links:
-      - backend
     volumes:
       - ./logs/nginx:/tmp/logs
       - ./static:/opt/app/static
       - ./media:/opt/app/media
-      - ./nginx/site.conf:/etc/nginx/conf.d/site.template
-      - nginx-certs:/etc/nginx/certs
+      - ./nginx/run.sh:/opt/run.sh
+      - ./nginx/conf:/etc/nginx/conf.d
       - ./nginx/certbot/conf:/etc/letsencrypt
       - ./nginx/certbot/www:/var/www/certbot
+    networks:
+      - backend
+    links:
+      - backend
     depends_on:
       - backend
+      - nginx_template
 
+  # Generate certificate with letsencrypt
   certbot:
     image: certbot/certbot
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
     volumes:
-    - ./nginx/certbot/conf:/etc/letsencrypt
-    - ./nginx/certbot/www:/var/www/certbot
+      - ./nginx/certbot/conf:/etc/letsencrypt
+      - ./nginx/certbot/www:/var/www/certbot
 
 volumes:
   database:
-  nginx-certs:
   rabbitmq:
 
 networks:

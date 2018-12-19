@@ -1,7 +1,5 @@
-from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.db.models.deletion import ProtectedError
-from django.urls import reverse
 
 
 class ExcludeDeletedManager(models.Manager):
@@ -10,9 +8,9 @@ class ExcludeDeletedManager(models.Manager):
 
 
 class BaseModel(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    _deleted = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True, editable=False)
+    updated_at = models.DateTimeField(auto_now=True, editable=False)
+    _deleted = models.BooleanField(default=False, editable=False)
 
     objects = ExcludeDeletedManager()
     admin_manager = models.Manager()

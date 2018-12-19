@@ -1,6 +1,6 @@
 #!/bin/bash
 
-domains=( "mjroson.tk" "www.mjroson.tk" )
+domains=( "mjroson.tk" )
 rsa_key_size=4096
 data_path="./nginx/certbot"
 email="matiroson@gmail.com" #Adding a valid address is strongly recommended

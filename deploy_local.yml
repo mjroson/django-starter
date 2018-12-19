@@ -1,6 +1,6 @@
 version: '3.1'
 services:
-  # Postgresql DB
+  # Postgresql database
   db:
     image: postgres:latest
     env_file: .env
@@ -14,7 +14,7 @@ services:
     volumes:
       - database:/var/lib/postgresql/data
   
-  # RabbitMQ
+  # RabbitMQ manager queque
   rabbitmq:
     image: rabbitmq
     hostname: rabbitmq
@@ -26,31 +26,30 @@ services:
       - rabbitmq:/var/lib/rabbitmq
 
   # Celery worker
-  worker: #&app_base
-    image: boilerplate_backend
-    #build: ./backend
+  worker:
+    image: ${PROJ_NAME}_backend:${IMG_VERSION}
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     container_name: ${PROJ_NAME}_worker
-    command: bash -c "sleep 5 && celery -A backend worker -l info --beat --scheduler django_celery_beat.schedulers:DatabaseScheduler" #  --scheduler django_celery_beat.schedulers:DatabaseScheduler
-    #command: bash -c "sleep 140 && celery -A backend beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler"
+    command: bash -c "sleep 5 && celery -A backend worker -l info --beat --scheduler django_celery_beat.schedulers:DatabaseScheduler"
     env_file: .env
     environment:
       - C_FORCE_ROOT=true
-    #links:
-    #  - db
-    #  - rabbitmq
+    links:
+      - db
+      - rabbitmq
     volumes:
       - ./backend:/usr/src/app
     depends_on:
       - rabbitmq
       - db
     
-  # Django Backend
-  backend: 
-    #<<: *app_base
-    image: boilerplate_backend
+  # Django backend
+  backend:
+    image: ${PROJ_NAME}_backend:${IMG_VERSION}
     container_name: ${PROJ_NAME}_backend
     command: bash -c "sleep 10 && sh run.sh"
-    #command: bash -c "sleep 120 && python manage.py runserver 0.0.0.0:8000"
     env_file: .env
     environment:
       - ENVIRONMENT=local
