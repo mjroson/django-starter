@@ -9,7 +9,7 @@ from pytz import timezone
 
 
 def get_local_date():
-	return  datetime.now(timezone('America/Argentina/Cordoba'))
+	return datetime.now(timezone('America/Argentina/Cordoba'))
 
 
 def generate_unique_slug(from_class, from_strs):

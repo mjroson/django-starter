@@ -53,6 +53,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+
+nginx/cerbot
+
 assets/*
 
 webpack-stats.dev.json

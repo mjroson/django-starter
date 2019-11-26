@@ -1,5 +1,7 @@
-FROM python:3.6.0
-MAINTAINER Made2
+FROM python:3.7
+
+MAINTAINER matiroson@gmail.com
+
 ENV PYTHONUNBUFFERED 1
 
 RUN apt-get update -y \
