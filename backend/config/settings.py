@@ -8,9 +8,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 if not env('SECRET_KEY'):
     warnings.warn((
-                      "Please define SECRET_KEY before importing {0}, as a fallback "
-                      "for when the environment variable is not available."
-                  ).format(__name__))
+        "Please define SECRET_KEY before importing {0}, as a fallback "
+        "for when the environment variable is not available."
+    ).format(__name__))
 else:
     SECRET_KEY = env('SECRET_KEY')
 
@@ -151,13 +151,18 @@ STATICFILES_DIRS = [
 # CONFIG CELERY AND RABBITMQ
 ###################################################################
 
+# More info : http://docs.celeryproject.org/en/master/userguide/configuration.html#broker-url
 BROKER_URL = "amqp://{user}:{password}@rabbitmq:5672//?heartbeat=30".format(
     user=env('RABBITMQ_DEFAULT_USER'),
     password=env('RABBITMQ_DEFAULT_PASS')
 )
 
 broker_url = BROKER_URL
+CELERY_BROKER_URL = broker_url
 
+
+# Define static schedule example:
+#
 # from celery.schedules import crontab
 # from datetime import timedelta
 # CELERYBEAT_SCHEDULE = {
@@ -169,9 +174,10 @@ broker_url = BROKER_URL
 #     },
 # }
 
-CELERY_BROKER_URL = broker_url
 
+# Configure celery results backend
+# More info: http://docs.celeryproject.org/en/master/django/first-steps-with-django.html#using-celery-with-django
 CELERY_RESULT_BACKEND = 'django-db'
 
-CELERY_TIMEZONE = 'UTC'
-CELERY_ENABLE_UTC = True
+CELERY_TIMEZONE = TIME_ZONE
+CELERY_ENABLE_UTC = TIME_ZONE == 'UTC'

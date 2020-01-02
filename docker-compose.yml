@@ -31,16 +31,27 @@ services:
     volumes:
       - rabbitmq:/var/lib/rabbitmq
 
-  # Celery worker
-  worker:
+  backend_base: &backendbase
     env_file: .env
     build:
       context: ./backend
       args:
         ENVIRONMENT: ${ENVIRONMENT}
     image: ${PROJ_NAME}_backend:${IMG_VERSION}
+    volumes:
+      - ./backend:/usr/src/app
+
+  # Celery worker
+  worker:
+    <<: *backendbase
+    # env_file: .env
+    # build:
+    #   context: ./backend
+    #   args:
+    #     ENVIRONMENT: ${ENVIRONMENT}
+    image: ${PROJ_NAME}_backend:${IMG_VERSION}
     container_name: ${PROJ_NAME}_worker_${IMG_VERSION}
-    command: bash -c "sleep 5 && celery -A backend worker -l info --beat" #  --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    command: bash -c "sleep 15 && sh run_task.sh"
     deploy:
       replicas: 1
       restart_policy:
@@ -50,8 +61,8 @@ services:
       options:
         max-size: "200k"
         max-file: "10"
-    volumes:
-      - ./backend:/usr/src/app
+    # volumes:
+    #   - ./backend:/usr/src/app
     depends_on:
       - rabbitmq
       - db
@@ -63,11 +74,12 @@ services:
 
   # Django backend
   backend:
-    env_file: .env
-    build:
-      context: ./backend
-      args:
-        ENVIRONMENT: ${ENVIRONMENT}
+    <<: *backendbase
+    # env_file: .env
+    # build:
+    #   context: ./backend
+    #   args:
+    #     ENVIRONMENT: ${ENVIRONMENT}
     image: ${PROJ_NAME}_backend:${IMG_VERSION}
     container_name: ${PROJ_NAME}_backend_${IMG_VERSION}
     command: bash -c "sleep 10 && sh run.sh"
@@ -75,8 +87,8 @@ services:
       replicas: 1
       restart_policy:
         condition: on-failure
-    volumes:
-      - ./backend:/usr/src/app
+    # volumes:
+    #   - ./backend:/usr/src/app
     expose:
       - "8000"
     ports:

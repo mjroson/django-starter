@@ -1,19 +1,14 @@
 version: "3.7"
 services:
-  # Celery worker
-  worker:
+  backend_base: &backendbase
     build:
       context: ./backend
       args:
         EXTRA_PACKAGES: graphviz-dev
-        ENVIRONMENT: local
+        ENVIRONMENT: ${ENVIRONMENT}
 
-  # Django backend
+  worker:
+    <<: *backendbase
+
   backend:
-    build:
-      context: ./backend
-      args:
-        EXTRA_PACKAGES: graphviz-dev
-        ENVIRONMENT: local
-    expose:
-      - "8000"
+    <<: *backendbase
