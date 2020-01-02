@@ -35,6 +35,6 @@ if not User.objects.filter(is_superuser=True).exists():
 	python3 manage.py runserver 0.0.0.0:8000
 
 [ "$ENVIRONMENT" != local ] &&
-	gunicorn backend.wsgi:application --bind 0.0.0.0:8000 --log-level=info --timeout=500
+	gunicorn config.wsgi:application --bind 0.0.0.0:8000 --log-level=info --timeout=500
 
 

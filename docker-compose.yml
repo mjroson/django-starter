@@ -1,4 +1,4 @@
-version: '3'
+version: "3.7"
 services:
   # Postgresql database
   db:
@@ -33,10 +33,14 @@ services:
 
   # Celery worker
   worker:
-    image: ${PROJ_NAME}_backend:${IMG_VERSION}
-    container_name: ${PROJ_NAME}_worker
-    command: bash -c "sleep 5 && celery -A backend worker -l info --beat" #  --scheduler django_celery_beat.schedulers:DatabaseScheduler
     env_file: .env
+    build:
+      context: ./backend
+      args:
+        ENVIRONMENT: ${ENVIRONMENT}
+    image: ${PROJ_NAME}_backend:${IMG_VERSION}
+    container_name: ${PROJ_NAME}_worker_${IMG_VERSION}
+    command: bash -c "sleep 5 && celery -A backend worker -l info --beat" #  --scheduler django_celery_beat.schedulers:DatabaseScheduler
     deploy:
       replicas: 1
       restart_policy:
@@ -59,10 +63,14 @@ services:
 
   # Django backend
   backend:
-    image: ${PROJ_NAME}_backend:${IMG_VERSION}
-    container_name: ${PROJ_NAME}_backend
-    command: bash -c "sleep 10 && sh run.sh"
     env_file: .env
+    build:
+      context: ./backend
+      args:
+        ENVIRONMENT: ${ENVIRONMENT}
+    image: ${PROJ_NAME}_backend:${IMG_VERSION}
+    container_name: ${PROJ_NAME}_backend_${IMG_VERSION}
+    command: bash -c "sleep 10 && sh run.sh"
     deploy:
       replicas: 1
       restart_policy:
@@ -77,54 +85,6 @@ services:
       - backend
       - task_queque
       - database
-
-  # Build dynamic configuration for nginx
-  nginx_template:
-    image: nginx:latest
-    container_name: ${PROJ_NAME}_nginx_template
-    env_file: .env
-    entrypoint: /bin/bash -c "envsubst '$$HOST_NAME' < /etc/nginx/conf.d/site.template > /etc/nginx/conf.d/site.conf"
-    volumes:
-      - ./nginx/conf:/etc/nginx/conf.d
-    networks:
-      - backend
-
-  # Web server/proxy
-  nginx:
-    image: nginx:latest
-    container_name: ${PROJ_NAME}_nginx
-    env_file: .env
-    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
-    deploy:
-      replicas: 1
-      restart_policy:
-        condition: on-failure
-    ports:
-      - "443:443"
-      - "80:80"
-    volumes:
-      - ./logs/nginx:/tmp/logs
-      - ./static:/opt/app/static
-      - ./media:/opt/app/media
-      - ./nginx/run.sh:/opt/run.sh
-      - ./nginx/conf:/etc/nginx/conf.d
-      - ./nginx/certbot/conf:/etc/letsencrypt
-      - ./nginx/certbot/www:/var/www/certbot
-    networks:
-      - backend
-    links:
-      - backend
-    depends_on:
-      - backend
-      - nginx_template
-
-  # Generate certificate with letsencrypt
-  certbot:
-    image: certbot/certbot
-    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
-    volumes:
-      - ./nginx/certbot/conf:/etc/letsencrypt
-      - ./nginx/certbot/www:/var/www/certbot
 
 volumes:
   database:

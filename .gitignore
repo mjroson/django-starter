@@ -28,7 +28,7 @@ docker-compose.override.yml
 volumedb/
 
 logs/*.log
-/celerybeat-schedule
+celerybeat-schedule
 
 media/*
 
