@@ -24,6 +24,8 @@ tests/report/
 
 **/migrations/00*
 
+*.old
+
 docker-compose.override.yml
 volumedb/
 
