@@ -1,0 +1,45 @@
+.ant-layout {
+  min-height: 100%;
+
+  & .ant-layout-sider {
+    min-height: 100%;
+
+    & .ant-layout-sider-zero-width-trigger {
+      z-index: 200;
+      top: 10px;
+    }
+
+    & .ant-menu {
+      margin-top: 20px;
+
+      & .ant-menu {
+        margin-top: 0px;
+      }
+    }
+  }
+
+  & .ant-layout {
+    width: 100%;
+
+    & .ant-layout-header {
+      background: #fff;
+      padding: 0;
+      position: sticky;
+      z-index: 100;
+      width: inherit;
+      max-width: inherit;
+
+      & #right-menu {
+        float: right;
+        padding: 0px 15px;
+      }
+    }
+
+    & .ant-layout-content {
+      padding: 24px;
+      background: #fff;
+      min-height: 360px;
+      margin-top: 20px;
+    }
+  }
+}
