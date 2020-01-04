@@ -31,6 +31,34 @@ export const list = params => {
   };
 };
 
+export const create = data => {
+  return dispatch => {
+    const reqName = 'create';
+    dispatch({
+      type: `${ENTITY_NAME}/REQUESTING`,
+      reqName
+    });
+    return axios
+      .post(`${ENDPOINT}`, data)
+      .then(resp => {
+        message.success(`Se creó un ${ENTITY_NAME} exitosamente.`);
+        dispatch({
+          type: `${ENTITY_NAME}/CREATE`,
+          data: resp.data,
+          reqName
+        });
+      })
+      .catch(e => {
+        message.error(`Hubo un error al intentar crear un ${ENTITY_NAME}.`);
+        dispatch({
+          type: `${ENTITY_NAME}/REQUEST-ERROR`,
+          reqName,
+          errors: e.response.data
+        });
+      });
+  };
+};
+
 export const update = data => {
   return dispatch => {
     const reqName = 'update';
@@ -56,6 +84,34 @@ export const update = data => {
           type: `${ENTITY_NAME}/REQUEST-ERROR`,
           reqName,
           errors: e.response ? e.response.data : null
+        });
+      });
+  };
+};
+
+export const destroy = data => {
+  return dispatch => {
+    const reqName = 'destroy';
+    dispatch({
+      type: `${ENTITY_NAME}/REQUESTING`,
+      reqName
+    });
+    axios
+      .delete(`${ENDPOINT}${data.id}/`)
+      .then(res => {
+        message.success(`El ${ENTITY_NAME} se elminó exitosamente.`);
+        dispatch({
+          type: `${ENTITY_NAME}/DESTROY`,
+          data,
+          reqName
+        });
+      })
+      .catch(e => {
+        message.error(`Hubo un error al intentar eliminar el ${ENTITY_NAME}.`);
+        dispatch({
+          type: `${ENTITY_NAME}/REQUEST-ERROR`,
+          reqName,
+          errors: e.response.data
         });
       });
   };

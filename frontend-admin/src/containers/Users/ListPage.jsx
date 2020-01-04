@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Drawer, Button, Row, Col, PageHeader } from 'antd';
+import { Drawer, Button, Row, Col, PageHeader, Popconfirm } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { useQueryParams, StringParam, NumberParam } from 'use-query-params';
 
 import SearchForm from 'components/SearchForm';
 import AppliedFilters from 'components/AppliedFilters';
-
-import { list } from './actions';
-import ObjectsTable from './components/Table';
+import { displayDate } from 'utils/formats';
+import { list, destroy } from './actions';
+import ObjectsTable from 'components/Table';
 import ObjectForm from './components/Form';
 import FormFilter from './components/Filter';
 import { PAGE_SIZE } from './constants';
@@ -48,6 +48,7 @@ const TablePage = props => {
   }, [reqCreateSuccess, reqUpdateSuccess]);
 
   const onChangeParams = params => {
+    console.warn('Params ', params);
     setQuery({ ...params, page: 1 });
   };
 
@@ -73,6 +74,62 @@ const TablePage = props => {
   const removeFilter = filterKey => {
     setQuery({ [filterKey]: undefined });
   };
+
+  const isColumnSorted = fieldName => {
+    const sorted = query.ordering || '';
+    if (fieldName === 'last_name') {
+      console.warn('sorted now : ', sorted);
+    }
+    return [fieldName, `-${fieldName}`].includes(sorted)
+      ? sorted.charAt(0) !== '-'
+        ? 'ascend'
+        : 'descend'
+      : false;
+  };
+
+  const columns = [
+    {
+      title: 'Id',
+      dataIndex: 'id',
+      sorter: true,
+      sortOrder: isColumnSorted('id')
+    },
+    {
+      title: 'Nombre y Apellido',
+      dataIndex: 'last_name',
+      render: (text, obj) => `${obj.last_name}, ${obj.first_name}`,
+      sorter: true,
+      sortOrder: isColumnSorted('last_name')
+    },
+    {
+      title: 'Email Principal',
+      dataIndex: 'email',
+      sorter: true,
+      sortOrder: isColumnSorted('email')
+    },
+    {
+      title: 'Fecha de Ingreso',
+      dataIndex: 'date_joined',
+      render: date => displayDate(date),
+      sorter: true,
+      sortOrder: isColumnSorted('date_joined')
+    },
+    {
+      title: 'Acciones',
+      key: 'operation',
+      render: obj => (
+        <span className="table-column-actions">
+          <Popconfirm
+            title="¿Desea eliminar este usuario?"
+            onConfirm={() => dispatch(destroy(obj))}
+          >
+            <a>Eliminar</a>
+          </Popconfirm>
+          <a onClick={() => onUpdate(obj)}>Editar</a>
+        </span>
+      )
+    }
+  ];
 
   return (
     <>
@@ -146,14 +203,15 @@ const TablePage = props => {
 
         <ObjectsTable
           results={objects.results}
+          columns={columns}
           pagination={{
             total: objects.count,
             current: query.page ? query.page : 1,
             pageSize: PAGE_SIZE
           }}
           loading={reqListLoading}
-          sorter={query.ordering ? query.ordering : ''}
           onChangeParams={onChangeParams}
+          sortedField={query.ordering || ''}
           onChangePage={page => setQuery({ page })}
           onUpdate={onUpdate}
         />

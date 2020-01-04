@@ -1,5 +1,4 @@
 import DashboardPage from 'containers/Dashboard/DashboardPage';
-// import UserDetail from 'containers/Users/components/Detail';
 import UserPage from 'containers/Users/ListPage';
 
 const dashboardRoutes = [
@@ -10,11 +9,6 @@ const dashboardRoutes = [
     icon: 'dashboard',
     component: DashboardPage
   },
-  // { Register page without menu item
-  //   path: '/users/:userId',
-  //   component: UserDetail,
-  //   hidden: true
-  // },
   {
     path: '/users',
     sidebarName: 'Usuarios',

@@ -74,6 +74,7 @@ export default function objects(state = initialState, action) {
         ...state,
         count: state.count - 1,
         loading: false,
+        results: [...state.results],
         reqStatus: {
           ...state.reqStatus,
           [action.reqName]: 'loaded'
