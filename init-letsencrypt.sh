@@ -1,9 +1,10 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-domains=( "mjroson.tk" )
+domains=( "${HOST_NAME}", "${SUBDOMAIN}.${HOST_NAME}" )
+
 rsa_key_size=4096
 data_path="./nginx/certbot"
-email="matiroson@gmail.com" #Adding a valid address is strongly recommended
+email=$EMAIL_SSL #Adding a valid address is strongly recommended
 staging=0 #Set to 1 if you're just testing your setup to avoid hitting request limits
 
 echo "### Preparing directories in $data_path ..."

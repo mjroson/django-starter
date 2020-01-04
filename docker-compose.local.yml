@@ -1,0 +1,14 @@
+version: "3.7"
+services:
+  backend_base: &backendbase
+    build:
+      context: ./backend
+      args:
+        EXTRA_PACKAGES: graphviz
+        ENVIRONMENT: ${ENVIRONMENT}
+
+  worker:
+    <<: *backendbase
+
+  backend:
+    <<: *backendbase
