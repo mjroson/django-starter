@@ -4,7 +4,7 @@ services:
     build:
       context: ./backend
       args:
-        EXTRA_PACKAGES: graphviz-dev
+        EXTRA_PACKAGES: graphviz
         ENVIRONMENT: ${ENVIRONMENT}
 
   worker:
