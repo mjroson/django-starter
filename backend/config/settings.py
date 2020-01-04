@@ -37,13 +37,19 @@ INSTALLED_APPS = [
 
     'django_extensions',
 
-    'apps.core'
+    'rest_framework',
+    'django_filters',
+    'corsheaders',
+    'apps.core',
+    # 'apps.auth',
+    # 'apps.user'
 ]
 
 #############################################
 #  MIDDLEWARE
 #############################################
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -183,3 +189,28 @@ CELERY_RESULT_BACKEND = 'django-db'
 
 CELERY_TIMEZONE = TIME_ZONE
 CELERY_ENABLE_UTC = TIME_ZONE == 'UTC'
+
+
+###################################################################
+# CONFIG DEFAULTS DJANGO REST FRAMEWORK
+###################################################################
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend',
+        'rest_framework.filters.OrderingFilter',
+        'rest_framework.filters.SearchFilter',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_PAGINATION_CLASS': 'apps.core.pagination.CustomPageNumberPagination',
+    'PAGE_SIZE': 5
+}
+
+
+CORS_ORIGIN_ALLOW_ALL = True

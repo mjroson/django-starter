@@ -4,7 +4,7 @@ services:
     build:
       context: ./backend
       args:
-        EXTRA_PACKAGES: graphviz
+        EXTRA_PACKAGES: graphviz graphviz-dev
         ENVIRONMENT: ${ENVIRONMENT}
 
   worker:
@@ -12,3 +12,7 @@ services:
 
   backend:
     <<: *backendbase
+    expose:
+      - "8000"
+    ports:
+      - "8000:8000"
