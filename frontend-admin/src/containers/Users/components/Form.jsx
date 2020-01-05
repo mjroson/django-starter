@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Form, Input, Button } from 'antd';
 import { useDispatch } from 'react-redux';
-import { update } from '../actions';
+import { update, create } from '../actions';
 
 const FormItem = Form.Item;
 
@@ -10,6 +10,7 @@ const ObjectForm = ({ currentObj, onClose, form }) => {
   const { getFieldDecorator } = form;
 
   useEffect(() => {
+    console.log('Use efect object form ', currentObj);
     if (currentObj != null) {
       form.setFieldsValue({ ...currentObj });
     } else {
@@ -25,7 +26,11 @@ const ObjectForm = ({ currentObj, onClose, form }) => {
         Object.keys(values).forEach(key => {
           obj[key] = values[key];
         });
-        dispatch(update(obj));
+        if (currentObj) {
+          dispatch(update(obj));
+        } else {
+          dispatch(create(obj));
+        }
       }
     });
   };

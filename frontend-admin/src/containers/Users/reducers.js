@@ -49,6 +49,22 @@ export default function objects(state = initialState, action) {
           [action.reqName]: null
         }
       };
+    case `${ENTITY_NAME}/CREATE`:
+      state.results.push(action.data);
+      return {
+        ...state,
+        count: state.count + 1,
+        results: [...state.results],
+        loading: false,
+        reqStatus: {
+          ...state.reqStatus,
+          [action.reqName]: 'loaded'
+        },
+        errors: {
+          ...state.errors,
+          [action.reqName]: null
+        }
+      };
     case `${ENTITY_NAME}/UPDATE`:
       return {
         ...state,

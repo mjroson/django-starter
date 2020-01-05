@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Drawer, Button, Row, Col, PageHeader, Popconfirm } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { useQueryParams, StringParam, NumberParam } from 'use-query-params';
+import {
+  useQueryParams,
+  StringParam,
+  NumberParam,
+  ArrayParam
+} from 'use-query-params';
 
 import SearchForm from 'components/SearchForm';
 import AppliedFilters from 'components/AppliedFilters';
@@ -10,7 +15,8 @@ import { list, destroy } from './actions';
 import ObjectsTable from 'components/Table';
 import ObjectForm from './components/Form';
 import FormFilter from './components/Filter';
-import { PAGE_SIZE } from './constants';
+import { PAGE_SIZE, ENTITY_NAME, ENTITY_PLURAL_NAME } from './constants';
+import { CustomDateParam, DateRangeParam } from 'utils/filter-params';
 
 const TablePage = props => {
   const dispatch = useDispatch();
@@ -23,6 +29,8 @@ const TablePage = props => {
     ordering: StringParam,
     first_name: StringParam,
     last_name: StringParam,
+    date_joined: CustomDateParam,
+    date_joined_range: DateRangeParam,
     id: NumberParam
   });
 
@@ -44,6 +52,7 @@ const TablePage = props => {
   }, [query]);
 
   useEffect(() => {
+    setCurrentObj(undefined);
     setVisibleForm(false);
   }, [reqCreateSuccess, reqUpdateSuccess]);
 
@@ -104,7 +113,7 @@ const TablePage = props => {
       sortOrder: isColumnSorted('email')
     },
     {
-      title: 'Fecha de Ingreso',
+      title: 'Fecha de registro',
       dataIndex: 'date_joined',
       render: date => displayDate(date),
       sorter: true,
@@ -116,7 +125,7 @@ const TablePage = props => {
       render: obj => (
         <span className="table-column-actions">
           <Popconfirm
-            title="¿Desea eliminar este usuario?"
+            title={`¿Desea eliminar este ${ENTITY_NAME}?`}
             onConfirm={() => dispatch(destroy(obj))}
           >
             <a>Eliminar</a>
@@ -159,7 +168,7 @@ const TablePage = props => {
         />
       </Drawer>
       <PageHeader
-        title="Usuarios"
+        title={ENTITY_PLURAL_NAME}
         onBack={() => window.history.back()}
         subTitle="listado de usuarios registrados"
         extra={[
@@ -181,18 +190,12 @@ const TablePage = props => {
               placeholder="Ingrese email, nombre o apellido"
             />
           </Col>
-          <Col span={6}></Col>
-          <Col span={6}>
-            <Button
-              onClick={() => setVisibleFilter(true)}
-              style={{ float: 'right', marginLeft: '5px' }}
-            >
-              Filtros
-            </Button>
+          <Col span={12} className="container-general-actions-right">
+            <Button onClick={() => setVisibleFilter(true)}>Filtros</Button>
           </Col>
         </Row>
         <Row>
-          <Col span={24} style={{ minHeight: '40px', padding: '5px' }}>
+          <Col span={24} className="container-applied-filters">
             <AppliedFilters filters={query} removeFilter={removeFilter} />
           </Col>
         </Row>
@@ -206,10 +209,16 @@ const TablePage = props => {
             pageSize: PAGE_SIZE
           }}
           loading={reqListLoading}
+          footer={() =>
+            `Total de ${ENTITY_PLURAL_NAME.toLowerCase()} encontrados ${
+              objects.count
+            }`
+          }
           onChangeParams={onChangeParams}
           sortedField={query.ordering || ''}
           onChangePage={page => setQuery({ page })}
           onUpdate={onUpdate}
+          tableLayout="auto"
         />
       </PageHeader>
     </>

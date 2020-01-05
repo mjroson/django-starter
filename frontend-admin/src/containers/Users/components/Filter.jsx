@@ -1,7 +1,8 @@
-import { Button, Col, Form, Input, Row, Select } from 'antd';
+import { Button, Col, Form, Input, Row, DatePicker } from 'antd';
 import React, { useEffect } from 'react';
 
 const FormItem = Form.Item;
+const RangePicker = DatePicker.RangePicker;
 
 const FilterForm = ({ onSubmit, onCancel, filters, form }) => {
   const { getFieldDecorator } = form;
@@ -51,22 +52,29 @@ const FilterForm = ({ onSubmit, onCancel, filters, form }) => {
             )(<Input placeholder="Ingresa el apellido completo" />)}
           </FormItem>
         </Col>
+
         <Col span={8}>
-          <FormItem label="Nro. Documento">
+          <FormItem label="Email">
             {getFieldDecorator(
-              'national_id',
+              'email',
               {}
-            )(<Input placeholder="Ingresa el documento" />)}
+            )(<Input placeholder="Ingresa el email" />)}
           </FormItem>
         </Col>
         <Col span={8}>
-          <FormItem label="Nro. de Cuenta">
-            {getFieldDecorator('id', {})(<Input placeholder="Ingresa el Id" />)}
+          <FormItem label="Fecha de registro">
+            {getFieldDecorator(
+              'date_joined',
+              {}
+            )(<DatePicker format="DD-MM-YYYY" />)}
           </FormItem>
         </Col>
         <Col span={8}>
-          <FormItem label="NR">
-            {getFieldDecorator('nr', {})(<Input placeholder="Ingresa el NR" />)}
+          <FormItem label="Fecha">
+            {getFieldDecorator(
+              'date_joined_range',
+              {}
+            )(<RangePicker format="YYYY-MM-DD" />)}
           </FormItem>
         </Col>
       </Row>
