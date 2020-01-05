@@ -22,11 +22,13 @@ const dashboardRoutes = [
     submenu: [
       {
         sidebarName: 'Item 1',
-        icon: 'right-circle'
+        icon: 'right-circle',
+        path: '/dummy-page-1'
       },
       {
         sidebarName: 'Item 2',
-        icon: 'right-circle'
+        icon: 'right-circle',
+        path: '/dummy-page-2'
       }
     ]
   },

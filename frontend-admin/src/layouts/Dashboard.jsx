@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Layout, Menu, Icon, Dropdown, Button } from 'antd';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import axios from 'axios';
 import Logo from 'components/icons/logo';
 import dashboardRoutes from 'routes/dashboard';
 import './index.less';
@@ -50,32 +49,32 @@ const sidebarMenu = (routes, parentKey) =>
     return null;
   });
 
-const onLogout = () => {
-  // TODO : This is local logout
-  window.localStorage.removeItem('token');
-  window.localStorage.removeItem('refresh');
-  history.replace('/login');
-};
-
-const menu = (
-  <Menu>
-    <Menu.Item key="1">
-      <Icon type="user" size="large" />
-      Profile
-    </Menu.Item>
-    <Menu.Divider />
-    <Menu.Item key="3" onClick={onLogout}>
-      <Icon type="logout" size="large" />
-      Logout
-    </Menu.Item>
-  </Menu>
-);
-
 const Dashboard = ({ history }) => {
   const [siderCollapsed, setSiderCollapsed] = useState(false);
   const initialMenuSelected = String(
     dashboardRoutes.findIndex(item => item.path === window.location.pathname) ||
       0
+  );
+
+  const onLogout = () => {
+    // TODO : This is local logout
+    window.localStorage.removeItem('token');
+    window.localStorage.removeItem('refresh');
+    history.replace('/login');
+  };
+
+  const menu = (
+    <Menu>
+      <Menu.Item key="1">
+        <Icon type="user" size="large" />
+        Profile
+      </Menu.Item>
+      <Menu.Divider />
+      <Menu.Item key="3" onClick={onLogout}>
+        <Icon type="logout" size="large" />
+        Logout
+      </Menu.Item>
+    </Menu>
   );
 
   const onClickMenuItem = (item, index, selectedKeys) => {
