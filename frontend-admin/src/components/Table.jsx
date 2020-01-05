@@ -15,7 +15,6 @@ const ObjectsTable = props => {
   } = props;
 
   const handleTableChange = (currentPagination, filters, sorter) => {
-    console.warn('Change table ', sorter);
     if (pagination.current !== currentPagination.current) {
       onChangePage(currentPagination.current);
     } else {

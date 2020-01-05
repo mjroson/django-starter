@@ -23,14 +23,12 @@ const LoginPage = props => {
         axios
           .post('/api/auth/token/', values)
           .then(resp => {
-            console.log('Resquest Login Success ', resp);
             message.success(`Bienvenido ${values.username}`);
             window.localStorage.setItem('token', resp.data.access);
             window.localStorage.setItem('refresh_token', resp.data.refresh);
             redirect();
           })
           .catch(e => {
-            console.log('Request Login Error ', e);
             if (
               e.response &&
               e.response.status === 400 &&

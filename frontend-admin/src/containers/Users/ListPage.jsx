@@ -48,7 +48,6 @@ const TablePage = props => {
   }, [reqCreateSuccess, reqUpdateSuccess]);
 
   const onChangeParams = params => {
-    console.warn('Params ', params);
     setQuery({ ...params, page: 1 });
   };
 
@@ -77,9 +76,6 @@ const TablePage = props => {
 
   const isColumnSorted = fieldName => {
     const sorted = query.ordering || '';
-    if (fieldName === 'last_name') {
-      console.warn('sorted now : ', sorted);
-    }
     return [fieldName, `-${fieldName}`].includes(sorted)
       ? sorted.charAt(0) !== '-'
         ? 'ascend'

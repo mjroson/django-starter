@@ -51,14 +51,10 @@ const sidebarMenu = (routes, parentKey) =>
   });
 
 const onLogout = () => {
-  axios
-    .get('/v1/auth/logout-cookie/')
-    .then(resp => {
-      window.location.replace('/login');
-    })
-    .catch(e => {
-      console.log('Request Logout Error ', e);
-    });
+  // TODO : This is local logout
+  window.localStorage.removeItem('token');
+  window.localStorage.removeItem('refresh');
+  history.replace('/login');
 };
 
 const menu = (
