@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, Switch } from 'antd';
 import { useDispatch } from 'react-redux';
 import { update, create } from '../actions';
 
@@ -57,6 +57,13 @@ const ObjectForm = ({ currentObj, onClose, form }) => {
           rules: [{ required: true, message: 'Este campo es requerido!' }]
         })(<Input />)}
       </FormItem>
+
+      <FormItem label="Activo">
+        {getFieldDecorator('is_active', { valuePropName: 'checked' })(
+          <Switch />
+        )}
+      </FormItem>
+
       <div className="drawer-footer">
         <Button onClick={onClose} style={{ marginRight: 8 }}>
           Cancelar

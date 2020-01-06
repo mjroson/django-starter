@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Drawer, Button, Row, Col, PageHeader, Popconfirm } from 'antd';
+import { Drawer, Button, Row, Col, PageHeader, Popconfirm, Icon } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   useQueryParams,
@@ -16,7 +16,7 @@ import ObjectsTable from 'components/Table';
 import ObjectForm from './components/Form';
 import FormFilter from './components/Filter';
 import { PAGE_SIZE, ENTITY_NAME, ENTITY_PLURAL_NAME } from './constants';
-import { CustomDateParam, DateRangeParam } from 'utils/filter-params';
+import { CustomDateParam } from 'utils/filter-params';
 
 const TablePage = props => {
   const dispatch = useDispatch();
@@ -30,7 +30,7 @@ const TablePage = props => {
     first_name: StringParam,
     last_name: StringParam,
     date_joined: CustomDateParam,
-    date_joined_range: DateRangeParam,
+    date_joined_range: ArrayParam,
     id: NumberParam
   });
 
@@ -118,6 +118,16 @@ const TablePage = props => {
       render: date => displayDate(date),
       sorter: true,
       sortOrder: isColumnSorted('date_joined')
+    },
+    {
+      title: 'Activo',
+      dataIndex: 'is_active',
+      render: value =>
+        value ? (
+          <Icon type="check-circle" theme="twoTone" twoToneColor="#52c41a" />
+        ) : (
+          <Icon type="minus-circle" theme="twoTone" twoToneColor="#ff4747" />
+        )
     },
     {
       title: 'Acciones',
