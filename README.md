@@ -8,6 +8,9 @@
    `cp docker-compose.local.yml docker-compose.overide.yml`
 2. Copy the environment file
    `cp .env.local .env`
+2.1. Generate secret key and set in .env
+    `make generate-secret-key`
+2.2. Configure .env
 3. Up project
    `docker-compose up`
 

@@ -1,3 +1,4 @@
+import React from 'react';
 import DashboardPage from 'containers/Dashboard/DashboardPage';
 import UserPage from 'containers/Users/ListPage';
 
@@ -14,7 +15,7 @@ const dashboardRoutes = [
     sidebarName: 'Usuarios',
     navbarName: 'Material Dashboard',
     icon: 'user',
-    component: UserPage
+    component: (props) => (<UserPage {...props} objectPath={['users']} />),
   },
   {
     sidebarName: 'Submenu',

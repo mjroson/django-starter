@@ -18,6 +18,8 @@ import FormFilter from './components/Filter';
 import { PAGE_SIZE, ENTITY_NAME, ENTITY_PLURAL_NAME } from './constants';
 import { CustomDateParam } from 'utils/filter-params';
 
+import { path } from 'ramda';
+
 const TablePage = props => {
   const dispatch = useDispatch();
   const [currentObj, setCurrentObj] = useState(null);
@@ -34,7 +36,7 @@ const TablePage = props => {
     id: NumberParam
   });
 
-  const objects = useSelector(state => state.users);
+  const objects = useSelector(path(props.objectPath));
 
   // Is it necesary or get values from objects const ?
   const reqCreateSuccess = useSelector(
