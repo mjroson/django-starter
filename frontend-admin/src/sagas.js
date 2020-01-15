@@ -17,6 +17,10 @@ const deleteUser = ({ id }) => {
     return axios.delete(`${ENDPOINT}${id}/`).catch(error => error.response);
 }
 
+const updateUser = (user) => {
+    return axios.put(`${ENDPOINT}${user.id}/`, user).catch(error => error.response);
+}
+
 export function* requestUsersAsync(action) {
     const reqName = 'list';
     
@@ -79,11 +83,43 @@ export function* deleteUserAsync(action) {
     
 }
 
+export function* updateUserAsync(action) {
+    console.log('updateUserAsync: ', action);
+
+    const reqName = 'update';
+    
+    yield put({
+        type: `${ENTITY_NAME}/REQUESTING`,
+        reqName
+    });
+
+    const result = yield call(updateUser, action.payload.user)
+
+    if(result.status === 200) {
+        message.success(`Se ha actualizado el ${ENTITY_NAME} exitosamente.`);
+        yield put({
+            type: `${ENTITY_NAME}/UPDATE`,
+            data: result.data,
+            reqName
+        });
+    } else {
+        message.error(
+            `Hubo un error al intentar actualizar el ${ENTITY_NAME}.`
+        );
+        yield put({
+            type: `${ENTITY_NAME}/REQUEST-ERROR`,
+            reqName,
+            errors: result.response ? result.response.data : null
+        });
+    }
+}
+
 export function* watchAll() {
     yield all([
         takeEvery("DUMMY_SAGA", executeDummySaga),
         takeEvery("REQUEST_USERS", requestUsersAsync),
-        takeEvery("DELETE_USER", deleteUserAsync)
+        takeEvery("DELETE_USER", deleteUserAsync),
+        takeEvery("UPDATE_USER", updateUserAsync)
     ])
 }
 
