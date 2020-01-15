@@ -1,5 +1,4 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
-import thunk from 'redux-thunk';
 import createSagaMiddleware from 'redux-saga';
 import logger from 'redux-logger';
 import { composeWithDevTools } from 'redux-devtools-extension';
@@ -14,7 +13,6 @@ const store = createStore(
   }),
   {},
   composeWithDevTools(applyMiddleware(logger, sagaMiddleware))
-  //composeWithDevTools(applyMiddleware(logger, sagaMiddleware, thunk))
 );
 
 sagaMiddleware.run(watchAll);
