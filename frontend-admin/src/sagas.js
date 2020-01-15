@@ -113,7 +113,7 @@ export function* updateUserAsync(action) {
         yield put({
             type: `${ENTITY_NAME}/REQUEST-ERROR`,
             reqName,
-            errors: result.response ? result.response.data : null
+            errors: result ? result.data : null
         });
     }
 }
@@ -139,10 +139,11 @@ export function* createUserAsync(action) {
         });
     } else {
         message.error(`Hubo un error al intentar crear un ${ENTITY_NAME}.`);
+
         yield put({
             type: `${ENTITY_NAME}/REQUEST-ERROR`,
             reqName,
-            errors: result.response.data
+            errors: result.data
         });
     }
     
