@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Form, Input, Button, Switch } from 'antd';
 import { useDispatch } from 'react-redux';
-import { create } from '../actions';
+// import { create } from '../actions';
 
 const FormItem = Form.Item;
 
@@ -35,7 +35,13 @@ const ObjectForm = ({ currentObj, onClose, form }) => {
             }
           }); 
         } else {
-          dispatch(create(obj));
+          // dispatch(create(obj));
+          dispatch({
+            type: 'CREATE_USER',
+            payload: {
+              user: obj
+            }
+          });
         }
       }
     });

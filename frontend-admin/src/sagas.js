@@ -21,6 +21,10 @@ const updateUser = (user) => {
     return axios.put(`${ENDPOINT}${user.id}/`, user).catch(error => error.response);
 }
 
+const createUser = (user) => {
+    return axios.post(`${ENDPOINT}`, user).catch(error => error.response);
+}
+
 export function* requestUsersAsync(action) {
     const reqName = 'list';
     
@@ -114,12 +118,43 @@ export function* updateUserAsync(action) {
     }
 }
 
+export function* createUserAsync(action) {
+    console.log('createUserAscync ', action);
+
+    const reqName = 'create';
+
+    yield put({
+        type: `${ENTITY_NAME}/REQUESTING`,
+        reqName
+    });
+
+    const result = yield call(createUser, action.payload.user);
+
+    if(result.status === 201) {
+        message.success(`Se creó un ${ENTITY_NAME} exitosamente.`);
+        yield put({
+            type: `${ENTITY_NAME}/CREATE`,
+            data: result.data,
+            reqName
+        });
+    } else {
+        message.error(`Hubo un error al intentar crear un ${ENTITY_NAME}.`);
+        yield put({
+            type: `${ENTITY_NAME}/REQUEST-ERROR`,
+            reqName,
+            errors: result.response.data
+        });
+    }
+    
+}
+
 export function* watchAll() {
     yield all([
         takeEvery("DUMMY_SAGA", executeDummySaga),
         takeEvery("REQUEST_USERS", requestUsersAsync),
         takeEvery("DELETE_USER", deleteUserAsync),
-        takeEvery("UPDATE_USER", updateUserAsync)
+        takeEvery("UPDATE_USER", updateUserAsync),
+        takeEvery("CREATE_USER", createUserAsync)
     ])
 }
 
