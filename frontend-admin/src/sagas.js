@@ -5,29 +5,21 @@ import { message } from 'antd';
 import { ENDPOINT, ENTITY_NAME, ENTITY_PLURAL_NAME } from './containers/Users/constants';
 
 
-// worker Saga: will be fired on USER_FETCH_REQUESTED actions
 function* executeDummySaga(action) {
     console.log('dummy saga!');
-
 }
 
 const getUsers = ({ url, ...params }) => {
-
-    console.log('params: ', params);
     return axios.get(url, { params }).catch(error=>error.response)
+}
 
-    /*
-    return axios.get(url, { params }, {
-    }).then(res => res)
-        .catch(error => {
-            // throw error
-            return error
-        });
-    */
+const deleteUser = ({ id }) => {
+    return axios.delete(`${ENDPOINT}${id}/`).catch(error => error.response);
 }
 
 export function* requestUsersAsync(action) {
     const reqName = 'list';
+    
     yield put({
         type: `${ENTITY_NAME}/REQUESTING`,
         reqName
@@ -39,7 +31,7 @@ export function* requestUsersAsync(action) {
     }
     let result = yield call(getUsers, params);
     
-    if(result.statusText === 'OK') {        
+    if(result.statusText === 'OK') {
         const newAction = {
             type: `${ENTITY_NAME}/LIST`,
             data: result.data,
@@ -55,10 +47,43 @@ export function* requestUsersAsync(action) {
     }
 }
 
+export function* deleteUserAsync(action) {
+    console.log('deleteUserAsync: ', action);
+
+    const reqName = 'destroy';    
+
+    yield put({
+        type: `${ENTITY_NAME}/REQUESTING`,
+        reqName
+    })
+
+    let result = yield call(deleteUser, {id: action.payload.id})
+
+    //debugger;
+
+    if(result.status === 204) {
+        message.success(`El ${ENTITY_NAME} se elminó exitosamente.`);
+        yield put({
+            type: `${ENTITY_NAME}/DESTROY`,
+            data: result.data,
+            reqName
+        });
+    } else {
+        message.error(`Hubo un error al intentar eliminar el ${ENTITY_NAME}.`);
+        yield put({
+            type: `${ENTITY_NAME}/REQUEST-ERROR`,
+            reqName,
+            errors: result.response.data
+        });
+    }
+    
+}
+
 export function* watchAll() {
     yield all([
         takeEvery("DUMMY_SAGA", executeDummySaga),
         takeEvery("REQUEST_USERS", requestUsersAsync),
+        takeEvery("DELETE_USER", deleteUserAsync)
     ])
 }
 

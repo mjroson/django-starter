@@ -11,7 +11,7 @@ import {
 import SearchForm from 'components/SearchForm';
 import AppliedFilters from 'components/AppliedFilters';
 import { displayDate } from 'utils/formats';
-import { list, destroy } from './actions';
+import { destroy } from './actions';
 import ObjectsTable from 'components/Table';
 import ObjectForm from './components/Form';
 import FormFilter from './components/Filter';
@@ -71,6 +71,18 @@ const TablePage = props => {
     setCurrentObj(null);
     setVisibleForm(true);
   };
+
+  const onDelete = (obj) => {
+    console.log('onDelete: ', obj);
+
+    dispatch({
+      type: 'DELETE_USER',
+      payload: {
+        id: obj.id
+      }
+    })
+    
+  }
 
   const search = value => {
     onChangeParams({ search: value });
@@ -138,7 +150,7 @@ const TablePage = props => {
         <span className="table-column-actions">
           <Popconfirm
             title={`¿Desea eliminar este ${ENTITY_NAME}?`}
-            onConfirm={() => dispatch(destroy(obj))}
+            onConfirm={() => onDelete(obj)}
           >
             <a>Eliminar</a>
           </Popconfirm>
