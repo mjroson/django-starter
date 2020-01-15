@@ -50,7 +50,7 @@ const TablePage = props => {
   );
 
   useEffect(() => {
-    dispatch(list(query));
+    dispatch({ type: 'REQUEST_USERS', payload: { query } })
   }, [query]);
 
   useEffect(() => {
