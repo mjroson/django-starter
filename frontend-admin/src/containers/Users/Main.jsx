@@ -1,22 +1,21 @@
+import { Button, Col, Drawer, Icon, PageHeader, Popconfirm, Row } from 'antd';
+import AppliedFilters from 'components/AppliedFilters';
+import SearchForm from 'components/SearchForm';
+import ObjectsTable from 'components/Table';
 import React, { useEffect, useState } from 'react';
-import { Drawer, Button, Row, Col, PageHeader, Popconfirm, Icon } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  useQueryParams,
-  StringParam,
+  ArrayParam,
   NumberParam,
-  ArrayParam
+  StringParam,
+  useQueryParams
 } from 'use-query-params';
-
-import SearchForm from 'components/SearchForm';
-import AppliedFilters from 'components/AppliedFilters';
-import { displayDate } from 'utils/formats';
-import { list, destroy } from './actions';
-import ObjectsTable from 'components/Table';
-import ObjectForm from './components/Form';
-import FormFilter from './components/Filter';
-import { PAGE_SIZE, ENTITY_NAME, ENTITY_PLURAL_NAME } from './constants';
 import { CustomDateParam } from 'utils/filter-params';
+import { displayDate } from 'utils/formats';
+import { destroy, list } from './actions';
+import FormFilter from './components/Filter';
+import ObjectForm from './components/Form';
+import { ENTITY_NAME, ENTITY_PLURAL_NAME, PAGE_SIZE } from './constants';
 
 const TablePage = props => {
   const dispatch = useDispatch();

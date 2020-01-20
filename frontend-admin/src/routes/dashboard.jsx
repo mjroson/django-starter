@@ -5,7 +5,7 @@ const dashboardRoutes = [
   {
     path: '/dashboard',
     sidebarName: 'Dashboard',
-    navbarName: 'Moni Dashboard',
+    navbarName: 'Boilerplate dashboard',
     icon: 'dashboard',
     component: DashboardPage
   },

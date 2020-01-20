@@ -123,7 +123,7 @@ const Dashboard = ({ history }) => {
         <Content>
           <Switch>{switchRoutes(dashboardRoutes)}</Switch>
         </Content>
-        <Footer style={{ textAlign: 'center' }}>Moni Online ©2019</Footer>
+        <Footer style={{ textAlign: 'center' }}>Boilerplate ©2020</Footer>
       </Layout>
     </Layout>
   );
