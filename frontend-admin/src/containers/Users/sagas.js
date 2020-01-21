@@ -61,14 +61,13 @@ export function* deleteUserAsync(action) {
     })
 
     let result = yield call(deleteUser, { id: action.payload.id })
-
-    //debugger;
-
+    
     if (result.status === 204) {
         message.success(`El ${ENTITY_NAME} se elminó exitosamente.`);
         yield put({
             type: `${ENTITY_NAME}/DESTROY`,
-            data: result.data,
+            //data: result.data,
+            data: { id: action.payload.id },
             reqName
         });
     } else {
