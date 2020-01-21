@@ -12,7 +12,7 @@ import {
 } from 'use-query-params';
 import { CustomDateParam } from 'utils/filter-params';
 import { displayDate } from 'utils/formats';
-import { destroy, list } from './actions';
+import userModel from './actions';
 import FormFilter from './components/Filter';
 import ObjectForm from './components/Form';
 import { ENTITY_NAME, ENTITY_PLURAL_NAME, PAGE_SIZE } from './constants';
@@ -47,7 +47,8 @@ const TablePage = props => {
   );
 
   useEffect(() => {
-    dispatch(list(query));
+    dispatch(userModel.list(query));
+    //dispatch(list(query));
   }, [query]);
 
   useEffect(() => {
@@ -135,7 +136,7 @@ const TablePage = props => {
         <span className="table-column-actions">
           <Popconfirm
             title={`¿Desea eliminar este ${ENTITY_NAME}?`}
-            onConfirm={() => dispatch(destroy(obj))}
+            onConfirm={() => dispatch(userModel.destroy(obj))}
           >
             <a>Eliminar</a>
           </Popconfirm>
@@ -160,6 +161,8 @@ const TablePage = props => {
         <ObjectForm
           currentObj={currentObj}
           onClose={() => setVisibleForm(false)}
+          create={data => dispatch(userModel.create(data))}
+          update={data => dispatch(userModel.update(data))}
         />
       </Drawer>
 

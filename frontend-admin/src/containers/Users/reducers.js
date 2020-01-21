@@ -9,6 +9,7 @@ const initialState = {
 };
 
 export default function objects(state = initialState, action) {
+  console.log('Reducer actions : ', action);
   switch (action.type) {
     case `${ENTITY_NAME}/REQUESTING`:
       return {
@@ -34,7 +35,7 @@ export default function objects(state = initialState, action) {
           [action.reqName]: action.errors
         }
       };
-    case `${ENTITY_NAME}/LIST`:
+    case `${ENTITY_NAME}/LIST`: {
       const { results, count } = action.data;
       return {
         ...state,
@@ -49,12 +50,12 @@ export default function objects(state = initialState, action) {
           [action.reqName]: null
         }
       };
+    }
     case `${ENTITY_NAME}/CREATE`:
-      state.results.push(action.data);
       return {
         ...state,
         count: state.count + 1,
-        results: [...state.results],
+        results: [...state.results.push(action.data)],
         loading: false,
         reqStatus: {
           ...state.reqStatus,
@@ -82,15 +83,16 @@ export default function objects(state = initialState, action) {
         }
       };
     case `${ENTITY_NAME}/DESTROY`:
-      state.results.splice(
-        state.results.findIndex(elem => elem.id === action.data.id),
-        0
-      );
       return {
         ...state,
         count: state.count - 1,
         loading: false,
-        results: [...state.results],
+        results: [
+          ...state.results.splice(
+            state.results.findIndex(elem => elem.id === action.data.id),
+            0
+          )
+        ],
         reqStatus: {
           ...state.reqStatus,
           [action.reqName]: 'loaded'

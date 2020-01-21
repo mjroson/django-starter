@@ -1,5 +1,5 @@
 import DashboardPage from 'containers/Dashboard/DashboardPage';
-import UserPage from 'containers/Users/ListPage';
+import UserPage from 'containers/Users/Main';
 
 const dashboardRoutes = [
   {

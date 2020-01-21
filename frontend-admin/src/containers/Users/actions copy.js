@@ -15,9 +15,8 @@ const initialState = {
 userModel.make({
   entityName: ENTITY_NAME,
   entityNamePluralName: ENTITY_PLURAL_NAME,
-  ApiUrl: ENDPOINT
+  ApiUrl: ENDPOINT,
+  initialState
 });
-
-export const reducer = userModel.reducer(initialState);
 
 export default userModel;
