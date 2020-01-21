@@ -1,5 +1,5 @@
 import { ENTITY_NAME } from './constants';
-import { set, lensPath, pipe, curry, add, append, lensProp, evolve, map, filter, not } from 'ramda';
+import { set, lensPath, pipe, add, append, lensProp, evolve, map, filter, not } from 'ramda';
 
 const initialState = {
   count: 0,
@@ -12,19 +12,17 @@ const initialState = {
 export default function objects(state = initialState, action) {
 
   const reqStatusLens = lensPath(['reqStatus', action.reqName]);  
-  const setStatus = set(reqStatusLens);
-  const curriedSetStatus = curry(setStatus);
+  const setStatus = set(reqStatusLens);  
 
   const errosLens = lensPath(['errors', action.reqName]);
-  const setErrors = set(errosLens);
-  const curriedSetErrors = curry(setErrors);
-  const clearErrors = curriedSetErrors(null);  
+  const setErrors = set(errosLens);  
+  const clearErrors = setErrors(null);  
 
   const setResults = set(lensPath(['results']));
   const setCount = set(lensPath(['count']));
 
-  const setStatusLoaded = curriedSetStatus('loaded');
-  const setLoadingValue = curriedSetStatus('loading');
+  const setStatusLoaded = setStatus('loaded');
+  const setLoadingValue = setStatus('loading');
   const setLoading = pipe(setLoadingValue, clearErrors);
 
   const setLoadingFalse = set(lensProp('loading'), false)
@@ -34,7 +32,7 @@ export default function objects(state = initialState, action) {
       return setLoading(state)
 
     case `${ENTITY_NAME}/REQUEST-ERROR`:
-      return pipe(setStatusLoaded, curriedSetErrors(action.errors))(state)
+      return pipe(setStatusLoaded, setErrors(action.errors))(state)
 
     case `${ENTITY_NAME}/LIST`:
       const { results, count } = action.data;
@@ -42,8 +40,8 @@ export default function objects(state = initialState, action) {
       return pipe(
         setStatusLoaded, 
         clearErrors,
-        curry(setResults)(results),
-        curry(setCount)(count)
+        setResults(results),
+        setCount(count)
         )(state)
 
     case `${ENTITY_NAME}/CREATE`:
