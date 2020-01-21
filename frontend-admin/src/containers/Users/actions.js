@@ -4,13 +4,13 @@ import { ENDPOINT, ENTITY_NAME, ENTITY_PLURAL_NAME } from './constants';
 
 const userModel = APIRestMaker;
 
-const initialState = {
-  count: 0,
-  results: [],
-  errors: {},
-  loading: false,
-  reqStatus: {}
-};
+// const initialState = {
+//   count: 0,
+//   results: [],
+//   errors: {},
+//   loading: false,
+//   reqStatus: {}
+// };
 
 userModel.make({
   entityName: ENTITY_NAME,
@@ -18,6 +18,6 @@ userModel.make({
   ApiUrl: ENDPOINT
 });
 
-export const reducer = userModel.reducer(initialState);
+// export const reducer = userModel.reducer(initialState);
 
 export default userModel;
