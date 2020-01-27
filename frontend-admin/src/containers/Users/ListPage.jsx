@@ -50,7 +50,7 @@ const TablePage = props => {
 
   useEffect(() => {
     dispatch({ type: 'REQUEST_USERS', payload: { query } })
-  }, [query]);
+  }, [query, dispatch]);
 
   useEffect(() => {
     setCurrentObj(undefined);
@@ -148,9 +148,9 @@ const TablePage = props => {
             title={`¿Desea eliminar este ${ENTITY_NAME}?`}
             onConfirm={() => onDelete(obj)}
           >
-            <a>Eliminar</a>
+            <span>Eliminar</span>
           </Popconfirm>
-          <a onClick={() => onUpdate(obj)}>Editar</a>
+          <span onClick={() => onUpdate(obj)}>Editar</span>
         </span>
       )
     }

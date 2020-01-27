@@ -1,6 +1,5 @@
-import { all, takeEvery, call, put } from 'redux-saga/effects';
+import { takeEvery, call, put } from 'redux-saga/effects';
 import axios from 'axios';
-import { message } from 'antd';
 
 const ENTITY_NAME = 'POST';
 const ENDPOINT = '/api/post/';

@@ -85,7 +85,7 @@ const Dashboard = ({ history }) => {
     if (!window.localStorage.getItem('token')) {
       history.replace('/login');
     }
-  }, []);
+  }, [history]);
 
   return (
     <Layout>

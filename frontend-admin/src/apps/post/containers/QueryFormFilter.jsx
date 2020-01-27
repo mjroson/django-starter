@@ -8,7 +8,7 @@ import {
 
 const QueryFormFilter = ({ onSubmit, onCancel, filters }) => {
   
-  const [query, setQuery] = useQueryParams({
+  const [setQuery] = useQueryParams({
     page: NumberParam,
     search: StringParam,
     ordering: StringParam,
@@ -20,20 +20,9 @@ const QueryFormFilter = ({ onSubmit, onCancel, filters }) => {
     setQuery({ ...params, page: 1 });
   };
 
-  const handleSubmitValues = values => {    
+  const handleSubmitValues = values => {
     changeQueryParams(values);
-    onSubmit(values);    
-  };
-
-  const formItemLayout = {
-    labelCol: {
-      xs: { span: 24 },
-      sm: { span: 8 }
-    },
-    wrapperCol: {
-      xs: { span: 24 },
-      sm: { span: 16 }
-    }
+    onSubmit(values);
   };
 
   return (

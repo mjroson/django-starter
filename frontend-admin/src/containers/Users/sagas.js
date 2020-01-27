@@ -1,7 +1,7 @@
-import { all, takeEvery, call, put } from 'redux-saga/effects';
+import { takeEvery, call, put } from 'redux-saga/effects';
 import axios from 'axios';
 import { message } from 'antd';
-import { ENDPOINT, ENTITY_NAME, ENTITY_PLURAL_NAME } from './constants';
+import { ENDPOINT, ENTITY_NAME } from './constants';
 
 
 const getUsers = ({ url, ...params }) => {

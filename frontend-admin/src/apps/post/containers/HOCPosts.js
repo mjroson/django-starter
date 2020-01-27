@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Button } from 'antd';
+import FiltersDrawer from './FiltersDrawer';
 import {
     useQueryParams,
     StringParam,
     NumberParam,
-    ArrayParam
+    //ArrayParam
 } from 'use-query-params';
 
 import { pathOr } from 'ramda';
 import Posts from './Posts';
 import QuerySearchForm from './QuerySearchForm';
-import QueryFormFilter from './QueryFormFilter';
 
 const HOCPosts = (props) => {
     // Effects
@@ -18,7 +19,7 @@ const HOCPosts = (props) => {
 
     const [visibleFilter, setVisibleFilter] = useState(false);
 
-    const [query, setQuery] = useQueryParams({
+    const [query] = useQueryParams({
         page: NumberParam,
         search: StringParam,
         ordering: StringParam,
@@ -33,7 +34,7 @@ const HOCPosts = (props) => {
                 payload: { query }
             }
         );
-    }, [query]);
+    }, [query, dispatch]);
 
     const objects = useSelector(pathOr([], ['posts']))
 
@@ -43,12 +44,16 @@ const HOCPosts = (props) => {
 
     return(
         <>
+            <FiltersDrawer 
+                setVisibleFilter={setVisibleFilter}
+                visibleFilter={visibleFilter}
+                applyFilter={applyFilter}
+                query={query}
+                />
+            
+            <Button onClick={() => setVisibleFilter(true)}>Filtros</Button>
             <QuerySearchForm />
-            <QueryFormFilter
-                onSubmit={applyFilter}
-                onCancel={() => setVisibleFilter(false)}
-                filters={query}
-            />
+            
             <Posts objects={objects} />
         </>
     )

@@ -4,7 +4,7 @@ import {
     useQueryParams,
     StringParam,
     NumberParam,
-    ArrayParam
+    //ArrayParam
 } from 'use-query-params';
 
 const QuerySearchForm = (props) => {
