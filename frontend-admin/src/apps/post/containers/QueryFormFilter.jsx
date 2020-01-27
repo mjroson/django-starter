@@ -1,14 +1,12 @@
-import { Button, Col, Form, Input, Row, DatePicker } from 'antd';
-import React, { useEffect } from 'react';
+import React from 'react';
 import FormFilter from './FormFilter';
 import {
   useQueryParams,
   StringParam,
-  NumberParam,
-  ArrayParam
+  NumberParam
 } from 'use-query-params';
 
-const QueryFormFilter = ({ onSubmit, onCancel, filters, form }) => {
+const QueryFormFilter = ({ onSubmit, onCancel, filters }) => {
   
   const [query, setQuery] = useQueryParams({
     page: NumberParam,
@@ -42,9 +40,8 @@ const QueryFormFilter = ({ onSubmit, onCancel, filters, form }) => {
     <FormFilter 
       onSubmit={handleSubmitValues} 
       onCancel={onCancel} 
-      filters={filters} 
-      form={form} />
+      filters={filters} />
   )
 };
 
-export default Form.create()(QueryFormFilter);
+export default QueryFormFilter;
