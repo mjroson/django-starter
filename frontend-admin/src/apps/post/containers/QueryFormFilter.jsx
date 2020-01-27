@@ -8,7 +8,7 @@ import {
 
 const QueryFormFilter = ({ onSubmit, onCancel, filters }) => {
   
-  const [setQuery] = useQueryParams({
+  const [query, setQuery] = useQueryParams({
     page: NumberParam,
     search: StringParam,
     ordering: StringParam,
