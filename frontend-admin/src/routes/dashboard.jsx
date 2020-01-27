@@ -1,6 +1,7 @@
 import React from 'react';
 import DashboardPage from 'containers/Dashboard/DashboardPage';
 import UserPage from 'containers/Users/ListPage';
+import HOCPosts from 'apps/post/containers/HOCPosts';
 
 const dashboardRoutes = [
   {
@@ -16,6 +17,13 @@ const dashboardRoutes = [
     navbarName: 'Material Dashboard',
     icon: 'user',
     component: (props) => (<UserPage {...props} objectPath={['users']} />),
+  },
+  {
+    path: '/posts',
+    sidebarName: 'Posts',
+    navbarName: 'Material Dashboard',
+    icon: 'user',
+    component: (props) => (<HOCPosts {...props} objectPath={['posts']} />),
   },
   {
     sidebarName: 'Submenu',
