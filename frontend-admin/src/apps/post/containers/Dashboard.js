@@ -10,16 +10,20 @@ import {
 } from 'use-query-params';
 
 import { pathOr } from 'ramda';
-import Posts from './Posts';
+import DashboardTable from './DashboardTable';
 import AppliedQueryFilters from './AppliedQueryFilters';
 import DashboardHeader from './DashboardHeader';
 import QuerySearchForm from './QuerySearchForm';
+import UpdateCreateDrawer from './UpdateCreateDrawer';
 
 const Dashboard = (props) => {
     // Effects
     const dispatch = useDispatch();
 
     const [visibleFilter, setVisibleFilter] = useState(false);
+
+    const [currentObj, setCurrentObj] = useState(null);
+    const [visibleForm, setVisibleForm] = useState(false);
 
     const [query] = useQueryParams({
         page: NumberParam,
@@ -38,6 +42,27 @@ const Dashboard = (props) => {
         );
     }, [query, dispatch]);
 
+    // End Effects
+
+    const onUpdate = obj => {
+        setCurrentObj(obj);
+        setVisibleForm(true);
+    };
+
+    const onCreate = () => {
+        setCurrentObj(null);
+        setVisibleForm(true);
+    };
+
+    const onDelete = (obj) => {
+        dispatch({
+            type: 'DELETE_USER',
+            payload: {
+                id: obj.id
+            }
+        })
+    }
+
     const objects = useSelector(pathOr([], ['posts']))
 
     const applyFilter = values => {
@@ -46,6 +71,11 @@ const Dashboard = (props) => {
 
     return(
         <>
+            <UpdateCreateDrawer 
+                currentObj={currentObj}
+                visibleForm={visibleForm}
+                setVisibleForm={setVisibleForm}
+            />
             <FiltersDrawer 
                 setVisibleFilter={setVisibleFilter}
                 visibleFilter={visibleFilter}
@@ -66,11 +96,13 @@ const Dashboard = (props) => {
                         <AppliedQueryFilters />
                     </Col>
                 </Row>
+
+                <DashboardTable 
+                    objects={objects}
+                    onDelete={onDelete}
+                    onUpdate={onUpdate}
+            />
             </DashboardHeader>
-            
-            
-            
-            <Posts objects={objects} />
         </>
     )
 }
