@@ -110,10 +110,45 @@ export function* deletePostAsync(action) {
 
 }
 
+const createPost = (post) => {
+    return axios.post(`${ENDPOINT}`, post).catch(error => error.response);
+}
+
+export function* createPostAsync(action) {
+    console.log('createPostAscync ', action);
+
+    const reqName = 'create';
+
+    yield put({
+        type: `${ENTITY_NAME}/REQUESTING`,
+        reqName
+    });
+
+    const result = yield call(createPost, action.payload.post);
+
+    if (result.status === 201) {
+        message.success(`Se creó un ${ENTITY_NAME} exitosamente.`);
+        yield put({
+            type: `${ENTITY_NAME}/CREATE`,
+            data: result.data,
+            reqName
+        });
+    } else {
+        message.error(`Hubo un error al intentar crear un ${ENTITY_NAME}.`);
+
+        yield put({
+            type: `${ENTITY_NAME}/REQUEST-ERROR`,
+            reqName,
+            errors: result.data
+        });
+    }
+
+}
 const allPostSagas = [
         takeEvery('REQUEST_POSTS', requestPostAsync),
         takeEvery("UPDATE_POST", updatePostAsync),
         takeEvery("DELETE_POST", deletePostAsync),
+        takeEvery("CREATE_POST", createPostAsync)
 ]
 
 export default allPostSagas;

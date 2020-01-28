@@ -2,7 +2,7 @@ import React from 'react';
 import { ENTITY_PLURAL_NAME } from '../constants';
 import { Button, PageHeader } from 'antd';
 
-const DashboardHeader = (props) => {
+const DashboardHeader = ({onCreate, ...props}) => {
     return(
         <PageHeader
             title={ENTITY_PLURAL_NAME}
@@ -11,11 +11,11 @@ const DashboardHeader = (props) => {
             extra={[
                 <Button
                     type="primary"
-                    //onClick={() => onCreate()}
+                    onClick={() => onCreate()}
                     key="new_user"
                     style={{ float: 'right', marginLeft: '5px' }}
                 >
-                    Nuevo Usuario
+                    Nuevo Post
           </Button>
             ]}
         >

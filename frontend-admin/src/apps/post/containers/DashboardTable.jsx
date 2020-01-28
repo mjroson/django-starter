@@ -9,7 +9,7 @@ import { Popconfirm } from 'antd';
 import ObjectsTable from 'components/Table';
 import { ENTITY_NAME, PAGE_SIZE, ENTITY_PLURAL_NAME } from '../constants';
 
-const DashboardTable = ({ objects, onUpdate, onDelete, ...props}) => {
+const DashboardTable = ({ objects, onUpdate, onDelete, onCreate, ...props}) => {
     // Effects
     const [query, setQuery] = useQueryParams({
         page: NumberParam,
@@ -87,6 +87,7 @@ const DashboardTable = ({ objects, onUpdate, onDelete, ...props}) => {
             sortedField={query.ordering || ''}
             onChangePage={page => setQuery({ page })}
             onUpdate={onUpdate}
+            onCreate={onCreate}
             tableLayout="auto"
         />
     )

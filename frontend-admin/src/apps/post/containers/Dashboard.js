@@ -82,7 +82,8 @@ const Dashboard = (props) => {
                 applyFilter={applyFilter}
                 query={query}
                 />
-            <DashboardHeader>
+            <DashboardHeader
+                onCreate={onCreate}>
                 <Row>
                     <Col span={12}>
                         <QuerySearchForm />
@@ -101,6 +102,7 @@ const Dashboard = (props) => {
                     objects={objects}
                     onDelete={onDelete}
                     onUpdate={onUpdate}
+                    onCreate={onCreate}
             />
             </DashboardHeader>
         </>
