@@ -75,9 +75,45 @@ export function* updatePostAsync(action) {
     }
 }
 
+const deletePost = ({ id }) => {
+    return axios.delete(`${ENDPOINT}${id}/`).catch(error => error.response);
+}
+
+export function* deletePostAsync(action) {
+    console.log('deletePostAsync: ', action);
+
+    const reqName = 'destroy';
+
+    yield put({
+        type: `${ENTITY_NAME}/REQUESTING`,
+        reqName
+    })
+
+    let result = yield call(deletePost, { id: action.payload.id })
+
+    if (result.status === 204) {
+        message.success(`El ${ENTITY_NAME} se elminó exitosamente.`);
+        yield put({
+            type: `${ENTITY_NAME}/DESTROY`,
+            //data: result.data,
+            data: { id: action.payload.id },
+            reqName
+        });
+    } else {
+        message.error(`Hubo un error al intentar eliminar el ${ENTITY_NAME}.`);
+        yield put({
+            type: `${ENTITY_NAME}/REQUEST-ERROR`,
+            reqName,
+            errors: result.response.data
+        });
+    }
+
+}
+
 const allPostSagas = [
         takeEvery('REQUEST_POSTS', requestPostAsync),
         takeEvery("UPDATE_POST", updatePostAsync),
+        takeEvery("DELETE_POST", deletePostAsync),
 ]
 
 export default allPostSagas;

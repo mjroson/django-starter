@@ -56,7 +56,7 @@ const Dashboard = (props) => {
 
     const onDelete = (obj) => {
         dispatch({
-            type: 'DELETE_USER',
+            type: 'DELETE_POST',
             payload: {
                 id: obj.id
             }
