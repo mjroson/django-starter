@@ -1,7 +1,7 @@
 import React from 'react';
 import DashboardPage from 'containers/Dashboard/DashboardPage';
 import UserPage from 'containers/Users/ListPage';
-import HOCPosts from 'apps/post/containers/HOCPosts';
+import HOCPosts from 'apps/post/containers/Dashboard';
 
 const dashboardRoutes = [
   {

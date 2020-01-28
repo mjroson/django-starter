@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button } from 'antd';
+import { Button, Row, Col } from 'antd';
 import FiltersDrawer from './FiltersDrawer';
 import {
     useQueryParams,
@@ -11,9 +11,11 @@ import {
 
 import { pathOr } from 'ramda';
 import Posts from './Posts';
+import AppliedQueryFilters from './AppliedQueryFilters';
+import DashboardHeader from './DashboardHeader';
 import QuerySearchForm from './QuerySearchForm';
 
-const HOCPosts = (props) => {
+const Dashboard = (props) => {
     // Effects
     const dispatch = useDispatch();
 
@@ -50,13 +52,27 @@ const HOCPosts = (props) => {
                 applyFilter={applyFilter}
                 query={query}
                 />
+            <DashboardHeader>
+                <Row>
+                    <Col span={12}>
+                        <QuerySearchForm />
+                    </Col>
+                    <Col span={12} className="container-general-actions-right">
+                        <Button onClick={() => setVisibleFilter(true)}>Filtros</Button>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={24} className="container-applied-filters">
+                        <AppliedQueryFilters />
+                    </Col>
+                </Row>
+            </DashboardHeader>
             
-            <Button onClick={() => setVisibleFilter(true)}>Filtros</Button>
-            <QuerySearchForm />
+            
             
             <Posts objects={objects} />
         </>
     )
 }
 
-export default HOCPosts;
+export default Dashboard;
