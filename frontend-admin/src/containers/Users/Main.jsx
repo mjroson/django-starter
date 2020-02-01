@@ -1,4 +1,13 @@
-import { Button, Col, Drawer, Icon, PageHeader, Popconfirm, Row } from 'antd';
+import {
+  Button,
+  Col,
+  Drawer,
+  Icon,
+  PageHeader,
+  Popconfirm,
+  Row,
+  message
+} from 'antd';
 import AppliedFilters from 'components/AppliedFilters';
 import SearchForm from 'components/SearchForm';
 import ObjectsTable from 'components/Table';
@@ -47,8 +56,21 @@ const TablePage = props => {
   );
 
   useEffect(() => {
-    dispatch(userModel.list(query));
-    //dispatch(list(query));
+    // Example to dispatch list action and use success and error callBack functions (those are optionals)
+    dispatch(
+      userModel.list(
+        query,
+        data => {
+          console.log('Success callback user list ', data);
+        },
+        error => {
+          console.log(error);
+          message.error(
+            `Hubo un error al intentar recuperar el listado de ${ENTITY_PLURAL_NAME}`
+          );
+        }
+      )
+    );
   }, [query]);
 
   useEffect(() => {
@@ -84,13 +106,31 @@ const TablePage = props => {
   };
 
   const isColumnSorted = fieldName => {
-    const sorted = query.ordering || '';
-    return [fieldName, `-${fieldName}`].includes(sorted)
-      ? sorted.charAt(0) !== '-'
-        ? 'ascend'
-        : 'descend'
-      : false;
+    const ordering = query.ordering || '';
+
+    if (![fieldName, `-${fieldName}`].find(s => s === ordering)) return false;
+
+    return ordering.charAt(0) !== '-' ? 'ascend' : 'descend';
   };
+
+  const OptionsTable = ({ value }) => (
+    <span className="table-column-actions">
+      <Popconfirm
+        title={`¿Desea eliminar este ${ENTITY_NAME}?`}
+        onConfirm={() => dispatch(userModel.destroy(value))}
+      >
+        <Icon type="delete" />
+      </Popconfirm>
+      <Icon type="form" onClick={() => onUpdate(value)} />
+    </span>
+  );
+
+  const ActiveIcon = ({ value }) =>
+    value ? (
+      <Icon type="check-circle" theme="twoTone" twoToneColor="#52c41a" />
+    ) : (
+      <Icon type="minus-circle" theme="twoTone" twoToneColor="#ff4747" />
+    );
 
   const columns = [
     {
@@ -122,27 +162,12 @@ const TablePage = props => {
     {
       title: 'Activo',
       dataIndex: 'is_active',
-      render: value =>
-        value ? (
-          <Icon type="check-circle" theme="twoTone" twoToneColor="#52c41a" />
-        ) : (
-          <Icon type="minus-circle" theme="twoTone" twoToneColor="#ff4747" />
-        )
+      render: value => <ActiveIcon value={value} />
     },
     {
       title: 'Acciones',
       key: 'operation',
-      render: obj => (
-        <span className="table-column-actions">
-          <Popconfirm
-            title={`¿Desea eliminar este ${ENTITY_NAME}?`}
-            onConfirm={() => dispatch(userModel.destroy(obj))}
-          >
-            <a>Eliminar</a>
-          </Popconfirm>
-          <a onClick={() => onUpdate(obj)}>Editar</a>
-        </span>
-      )
+      render: obj => <OptionsTable value={obj} />
     }
   ];
 

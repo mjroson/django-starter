@@ -1,8 +1,7 @@
 import axios from 'axios';
-import { message } from 'antd';
 
 const APIRestMaker = (function(my) {
-  my.list = params => {
+  my.list = (params, onSuccess, onError, apiEndpoint = my.config.ApiUrl) => {
     return dispatch => {
       const reqName = 'list';
       dispatch({
@@ -10,28 +9,37 @@ const APIRestMaker = (function(my) {
         reqName
       });
       axios
-        .get(my.config.ApiUrl, { params })
+        .get(apiEndpoint, { params })
         .then(resp => {
           dispatch({
             type: `${my.config.entityName}/LIST`,
             data: resp.data,
             reqName
           });
+          if (typeof onSuccess === 'function') {
+            onSuccess(resp.data);
+          }
         })
         .catch(e => {
-          message.error(
-            `Hubo un error al intentar recuperar el listado de ${my.config.entityNamePluralName}`
-          );
           dispatch({
             type: `${my.config.entityName}/REQUEST-ERROR`,
             reqName,
             errors: e.response ? e.response.data : null
           });
+          if (typeof onError === 'function') {
+            onError(e.response ? e.response.data : null);
+          }
         });
     };
   };
 
-  my.create = data => {
+  my.create = (
+    data,
+    onSuccess,
+    onError,
+    params = null,
+    apiEndpoint = my.config.ApiUrl
+  ) => {
     return dispatch => {
       const reqName = 'create';
       dispatch({
@@ -39,29 +47,37 @@ const APIRestMaker = (function(my) {
         reqName
       });
       return axios
-        .post(`${my.config.ApiUrl}`, data)
+        .post(`${apiEndpoint}`, data)
         .then(resp => {
-          message.success(`Se creó un ${my.config.entityName} exitosamente.`);
           dispatch({
             type: `${my.config.entityName}/CREATE`,
             data: resp.data,
             reqName
           });
+          if (typeof onSuccess === 'function') {
+            onSuccess(resp.data);
+          }
         })
         .catch(e => {
-          message.error(
-            `Hubo un error al intentar crear un ${my.config.entityName}.`
-          );
           dispatch({
             type: `${my.config.entityName}/REQUEST-ERROR`,
             reqName,
             errors: e.response.data
           });
+          if (typeof onError === 'function') {
+            onError(e.response ? e.response.data : null);
+          }
         });
     };
   };
 
-  my.update = data => {
+  my.update = (
+    data,
+    onSuccess,
+    onError,
+    params = null,
+    apiEndpoint = my.config.ApiUrl
+  ) => {
     return dispatch => {
       const reqName = 'update';
       dispatch({
@@ -69,31 +85,37 @@ const APIRestMaker = (function(my) {
         reqName
       });
       return axios
-        .put(`${my.config.ApiUrl}${data.id}/`, data)
+        .put(`${apiEndpoint}${data.id}/`, data)
         .then(resp => {
-          message.success(
-            `Se ha actualizado el ${my.config.entityName} exitosamente.`
-          );
           dispatch({
             type: `${my.config.entityName}/UPDATE`,
             data: resp.data,
             reqName
           });
+          if (typeof onSuccess === 'function') {
+            onSuccess(resp.data);
+          }
         })
         .catch(e => {
-          message.error(
-            `Hubo un error al intentar actualizar el ${my.config.entityName}.`
-          );
           dispatch({
             type: `${my.config.entityName}/REQUEST-ERROR`,
             reqName,
             errors: e.response ? e.response.data : null
           });
+          if (typeof onError === 'function') {
+            onError(e.response ? e.response.data : null);
+          }
         });
     };
   };
 
-  my.destroy = data => {
+  my.destroy = (
+    data,
+    onSuccess,
+    onError,
+    params = null,
+    apiEndpoint = my.config.ApiUrl
+  ) => {
     return dispatch => {
       const reqName = 'destroy';
       dispatch({
@@ -101,30 +123,38 @@ const APIRestMaker = (function(my) {
         reqName
       });
       axios
-        .delete(`${my.config.ApiUrl}${data.id}/`)
-        .then(res => {
-          message.success(`El ${my.config.entityName} se elminó exitosamente.`);
+        .delete(`${apiEndpoint}${data.id}/`)
+        .then(resp => {
           dispatch({
             type: `${my.config.entityName}/DESTROY`,
             data,
             reqName
           });
+          if (typeof onSuccess === 'function') {
+            onSuccess(resp.data);
+          }
         })
         .catch(e => {
-          message.error(
-            `Hubo un error al intentar eliminar el ${my.config.entityName}.`
-          );
           dispatch({
             type: `${my.config.entityName}/REQUEST-ERROR`,
             reqName,
             errors: e.response.data
           });
+          if (typeof onError === 'function') {
+            onError(e.response ? e.response.data : null);
+          }
         });
     };
   };
 
-  my.reducer = initialState => {
-    return function(state = initialState, action) {
+  my.reducer = (
+    initialState,
+    reducerExtend = function(s) {
+      return s;
+    }
+  ) => {
+    return function(globalState = initialState, action) {
+      const state = reducerExtend(globalState);
       switch (action.type) {
         case `${my.config.entityName}/REQUESTING`:
           return {
