@@ -102,7 +102,7 @@ https://redux-toolkit.js.org/introduction/quick-start
 
 ### Structure to create a CRUD from API Rest
 
-![General Common CRUD](docs/images/common_crud.png)
+![General Common CRUD](docs/images/crud.png)
 
 |                 Open Filters                  |                Open Form                |
 | :-------------------------------------------: | :-------------------------------------: |
