@@ -15,7 +15,10 @@
    version="1.1"
    id="svg8"
    sodipodi:docname="general-layout.svg"
-   inkscape:version="0.92.3 (2405546, 2018-03-11)">
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"
+   inkscape:export-filename="/home/matias/projects/boilerplate/frontend-admin/docs/images/common_crud.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -31,12 +34,12 @@
      showgrid="false"
      showguides="false"
      inkscape:zoom="0.30931993"
-     inkscape:cx="1229.2405"
-     inkscape:cy="752.29141"
+     inkscape:cx="1037.7605"
+     inkscape:cy="684.02156"
      inkscape:window-x="0"
      inkscape:window-y="27"
      inkscape:window-maximized="1"
-     inkscape:current-layer="g2338" />
+     inkscape:current-layer="g4984" />
   <defs
      id="defs2">
     <marker
@@ -193,7 +196,9 @@
          id="g2338"
          transform="translate(-4.2183453,0.26153477)">
         <g
-           id="g1272">
+           id="g1272"
+           inkscape:export-xdpi="96"
+           inkscape:export-ydpi="96">
           <image
              width="361.42084"
              height="203.2"
@@ -295,7 +300,7 @@
              height="12.701612"
              width="296.9758"
              id="rect1006"
-             style="fill:#7137c8;fill-opacity:0;stroke:#7137c8;stroke-width:1;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none" />
+             style="fill:#ffcc00;fill-opacity:0;stroke:#7137c8;stroke-width:1;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none" />
           <circle
              r="5.6371446"
              cy="106.05951"
@@ -314,181 +319,267 @@
              cx="-97.098068"
              id="path1004"
              style="fill:#0000d4;fill-opacity:1;stroke:#0000d4;stroke-width:0.79616821;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none" />
+          <rect
+             style="fill:#ffcc00;fill-opacity:1;stroke:#ffcc00;stroke-width:0.37078115;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none"
+             id="rect4834"
+             width="30.390619"
+             height="9.0014362"
+             x="167.30275"
+             y="101.59311" />
+          <rect
+             style="fill:#c83771;fill-opacity:1;stroke:#c83771;stroke-width:0.34395832;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none"
+             id="rect4724"
+             width="18.176636"
+             height="8.9813957"
+             x="179.51387"
+             y="114.14479" />
         </g>
         <g
            id="g1252"
-           transform="translate(-13.758336,-1.5467808)">
-          <ellipse
-             ry="6.780304"
-             rx="6.7803044"
-             cy="87.803925"
-             cx="239.35735"
-             id="path994"
-             style="fill:#ff00ff;fill-opacity:1;stroke:#ff00ff;stroke-width:2.31439185;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none" />
-          <text
-             id="text1141"
-             y="90.952469"
-             x="256.23483"
-             style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
-             xml:space="preserve"><tspan
-               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.58333302px;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458332"
-               y="90.952469"
+           transform="translate(-13.758336,-1.5467808)"
+           inkscape:export-xdpi="96"
+           inkscape:export-ydpi="96">
+          <g
+             id="g5137"
+             transform="translate(1.0583332,-3.1750001)">
+            <ellipse
+               style="fill:#ff00ff;fill-opacity:1;stroke:#ff00ff;stroke-width:2.31439185;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none"
+               id="path994"
+               cx="239.35735"
+               cy="75.103912"
+               rx="6.7803044"
+               ry="6.780304" />
+            <text
+               xml:space="preserve"
+               style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
                x="256.23483"
-               id="tspan1139"
-               sodipodi:role="line">src/layouts/Dashboard.jsx</tspan></text>
-          <g
-             transform="translate(0,2.1166667)"
-             id="g1219">
+               y="78.252457"
+               id="text1141"><tspan
+                 sodipodi:role="line"
+                 id="tspan1139"
+                 x="256.23483"
+                 y="78.252457"
+                 style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.58333302px;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458332">src/layouts/Dashboard.jsx</tspan></text>
             <g
-               id="g1183"
-               transform="translate(5.8208336)">
-              <circle
-                 style="fill:#0000d4;fill-opacity:1;stroke:#0000d4;stroke-width:0.35498974;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none"
-                 id="ellipse1010"
-                 cx="241.64851"
-                 cy="171.71294"
-                 r="7.098547" />
-              <circle
-                 style="fill:#ff0000;fill-opacity:1;stroke:#ff0000;stroke-width:0.36654511;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none"
-                 id="ellipse1012"
-                 cx="241.64851"
-                 cy="109.63113"
-                 r="7.0927691" />
-              <ellipse
-                 style="fill:#ff6600;fill-opacity:1;stroke:#ff6600;stroke-width:0.4083125;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none"
-                 id="ellipse1014"
-                 cx="241.64851"
-                 cy="130.32507"
-                 rx="7.0718851"
-                 ry="7.0718856" />
-              <ellipse
-                 style="fill:#00ff00;fill-opacity:1;stroke:#00ff00;stroke-width:0.36985943;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none"
-                 id="ellipse1016"
-                 cx="241.64851"
-                 cy="151.01898"
-                 rx="7.0911117"
-                 ry="7.0911121" />
-            </g>
-            <text
-               id="text1145"
-               y="112.74263"
-               x="261.32361"
-               style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
-               xml:space="preserve"><tspan
-                 style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.58333302px;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458332"
-                 y="112.74263"
+               transform="translate(7.4083336,-15.875004)"
+               id="g1219">
+              <g
+                 transform="translate(5.8208336)"
+                 id="g1183">
+                <circle
+                   r="7.098547"
+                   cy="171.71294"
+                   cx="241.64851"
+                   id="ellipse1010"
+                   style="fill:#0000d4;fill-opacity:1;stroke:#0000d4;stroke-width:0.35498974;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none" />
+                <circle
+                   r="7.0927691"
+                   cy="109.63113"
+                   cx="241.64851"
+                   id="ellipse1012"
+                   style="fill:#ff0000;fill-opacity:1;stroke:#ff0000;stroke-width:0.36654511;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none" />
+                <ellipse
+                   ry="7.0718856"
+                   rx="7.0718851"
+                   cy="130.32507"
+                   cx="241.64851"
+                   id="ellipse1014"
+                   style="fill:#ff6600;fill-opacity:1;stroke:#ff6600;stroke-width:0.4083125;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none" />
+                <ellipse
+                   ry="7.0911121"
+                   rx="7.0911117"
+                   cy="151.01898"
+                   cx="241.64851"
+                   id="ellipse1016"
+                   style="fill:#00ff00;fill-opacity:1;stroke:#00ff00;stroke-width:0.36985943;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none" />
+              </g>
+              <text
+                 xml:space="preserve"
+                 style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
                  x="261.32361"
-                 id="tspan1143"
-                 sodipodi:role="line">Ant design layout Header</tspan></text>
-            <text
-               xml:space="preserve"
-               style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
-               x="260.51169"
-               y="133.43657"
-               id="text1149"><tspan
-                 sodipodi:role="line"
-                 id="tspan1147"
-                 x="260.51169"
+                 y="112.74263"
+                 id="text1145"><tspan
+                   sodipodi:role="line"
+                   id="tspan1143"
+                   x="261.32361"
+                   y="112.74263"
+                   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.58333302px;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458332">Ant design layout Header</tspan></text>
+              <text
+                 id="text1149"
                  y="133.43657"
-                 style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.58333302px;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458332">Ant design Sidebar layout</tspan></text>
-            <text
-               id="text1153"
-               y="154.13048"
-               x="261.61349"
-               style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
-               xml:space="preserve"><tspan
-                 style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.58333302px;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458332"
-                 y="154.13048"
+                 x="260.51169"
+                 style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+                 xml:space="preserve"><tspan
+                   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.58333302px;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458332"
+                   y="133.43657"
+                   x="260.51169"
+                   id="tspan1147"
+                   sodipodi:role="line">Ant design Sidebar layout</tspan></text>
+              <text
+                 xml:space="preserve"
+                 style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
                  x="261.61349"
-                 id="tspan1151"
-                 sodipodi:role="line">Ant design layout Footer</tspan></text>
-            <text
-               xml:space="preserve"
-               style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
-               x="261.28729"
-               y="174.86678"
-               id="text1157"><tspan
-                 sodipodi:role="line"
-                 id="tspan1155"
-                 x="261.28729"
+                 y="154.13048"
+                 id="text1153"><tspan
+                   sodipodi:role="line"
+                   id="tspan1151"
+                   x="261.61349"
+                   y="154.13048"
+                   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.58333302px;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458332">Ant design layout Footer</tspan></text>
+              <text
+                 id="text1157"
                  y="174.86678"
-                 style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.58333302px;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458332">src/containers/Users/Main.jsx</tspan></text>
-          </g>
-          <g
-             transform="translate(0,-2.1166667)"
-             id="g1204">
-            <g
-               id="g1189"
-               transform="translate(0,-12.700002)">
-              <circle
-                 r="5.6371446"
-                 style="fill:#8d5fd3;fill-opacity:1;stroke:#8d5fd3;stroke-width:0.63196057;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none"
-                 id="ellipse1045"
-                 cx="257.21585"
-                 cy="212.19914" />
-              <circle
-                 r="5.6416965"
-                 style="fill:#00aad4;fill-opacity:1;stroke:#00aad4;stroke-width:0.62285674;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none"
-                 id="ellipse1047"
-                 cx="257.21585"
-                 cy="234.38068" />
-              <circle
-                 r="5.6265979"
-                 style="fill:#aad400;fill-opacity:1;stroke:#aad400;stroke-width:0.65305454;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none"
-                 id="ellipse1049"
-                 cx="257.21585"
-                 cy="259.37656" />
-              <circle
-                 r="5.4504952"
-                 style="fill:#800080;fill-opacity:1;stroke:#800080;stroke-width:1.00525939;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none"
-                 id="ellipse1051"
-                 cx="257.21585"
-                 cy="281.50809" />
+                 x="261.28729"
+                 style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+                 xml:space="preserve"><tspan
+                   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.58333302px;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458332"
+                   y="174.86678"
+                   x="261.28729"
+                   id="tspan1155"
+                   sodipodi:role="line">src/containers/Users/Main.jsx</tspan></text>
             </g>
-            <text
-               xml:space="preserve"
-               style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
-               x="268.94934"
-               y="224.8345"
-               id="text1165"><tspan
-                 sodipodi:role="line"
-                 id="tspan1163"
-                 x="268.94934"
-                 y="224.8345"
-                 style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.58333302px;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458332">src/components/SearchForm.jsx</tspan></text>
-            <text
-               id="text1169"
-               y="249.83038"
-               x="269.40588"
-               style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
-               xml:space="preserve"><tspan
-                 style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.58333302px;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458332"
-                 y="249.83038"
-                 x="269.40588"
-                 id="tspan1167"
-                 sodipodi:role="line">src/components/AppliedFilters.jsx</tspan></text>
-            <text
-               xml:space="preserve"
-               style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
-               x="269.03625"
-               y="271.96191"
-               id="text1173"><tspan
-                 sodipodi:role="line"
-                 id="tspan1171"
-                 x="269.03625"
-                 y="271.96191"
-                 style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.58333302px;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458332">src/components/Table.jsx</tspan></text>
-            <text
-               xml:space="preserve"
-               style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
-               x="268.33328"
-               y="202.41885"
-               id="text1177"><tspan
-                 sodipodi:role="line"
-                 id="tspan1175"
-                 x="268.33328"
-                 y="202.41885"
-                 style="stroke-width:0.26458332">PageHeader from And design</tspan></text>
+            <g
+               transform="translate(0,-4.2333335)"
+               id="g5090">
+              <g
+                 id="g5061">
+                <g
+                   id="g1204"
+                   transform="translate(12.170835,-41.275016)">
+                  <g
+                     transform="translate(0,-12.700002)"
+                     id="g1189">
+                    <g
+                       id="g5037">
+                      <rect
+                         y="333.87643"
+                         x="251.43471"
+                         height="8.9813957"
+                         width="18.176636"
+                         id="rect4838"
+                         style="fill:#c83771;fill-opacity:1;stroke:#c83771;stroke-width:0.34395832;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none" />
+                      <text
+                         xml:space="preserve"
+                         style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+                         x="274.31937"
+                         y="341.28687"
+                         id="text4846"><tspan
+                           sodipodi:role="line"
+                           id="tspan4844"
+                           x="274.31937"
+                           y="341.28687"
+                           style="stroke-width:0.26458332">Button to open filters form</tspan></text>
+                    </g>
+                  </g>
+                  <g
+                     id="g5014">
+                    <circle
+                       transform="translate(-5.560253e-7,-12.700003)"
+                       r="5.6416965"
+                       style="fill:#00aad4;fill-opacity:1;stroke:#00aad4;stroke-width:0.62285674;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none"
+                       id="ellipse1047"
+                       cx="257.21585"
+                       cy="234.38068" />
+                    <text
+                       xml:space="preserve"
+                       style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+                       x="268.94934"
+                       y="224.8345"
+                       id="text1165"><tspan
+                         sodipodi:role="line"
+                         id="tspan1163"
+                         x="268.94934"
+                         y="224.8345"
+                         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.58333302px;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458332">src/components/SearchForm.jsx</tspan></text>
+                  </g>
+                  <g
+                     id="g5020">
+                    <circle
+                       transform="translate(-5.560253e-7,-12.700003)"
+                       r="5.6265979"
+                       style="fill:#aad400;fill-opacity:1;stroke:#aad400;stroke-width:0.65305454;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none"
+                       id="ellipse1049"
+                       cx="257.21585"
+                       cy="256.7966" />
+                    <text
+                       id="text1169"
+                       y="247.25043"
+                       x="269.40588"
+                       style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+                       xml:space="preserve"><tspan
+                         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.58333302px;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458332"
+                         y="247.25043"
+                         x="269.40588"
+                         id="tspan1167"
+                         sodipodi:role="line">src/components/AppliedFilters.jsx</tspan></text>
+                  </g>
+                  <g
+                     id="g5026">
+                    <circle
+                       transform="translate(-5.560253e-7,-12.700003)"
+                       r="5.4504952"
+                       style="fill:#800080;fill-opacity:1;stroke:#800080;stroke-width:1.00525939;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none"
+                       id="ellipse1051"
+                       cx="257.21585"
+                       cy="279.21252" />
+                    <text
+                       xml:space="preserve"
+                       style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+                       x="269.03625"
+                       y="269.66635"
+                       id="text1173"><tspan
+                         sodipodi:role="line"
+                         id="tspan1171"
+                         x="269.03625"
+                         y="269.66635"
+                         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.58333302px;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458332">src/components/Table.jsx</tspan></text>
+                  </g>
+                  <g
+                     id="g5032">
+                    <circle
+                       transform="translate(-5.560253e-7,-12.700003)"
+                       r="5.6371446"
+                       style="fill:#8d5fd3;fill-opacity:1;stroke:#8d5fd3;stroke-width:0.63196057;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none"
+                       id="ellipse1045"
+                       cx="257.21585"
+                       cy="301.62845" />
+                    <text
+                       xml:space="preserve"
+                       style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+                       x="268.33328"
+                       y="291.84818"
+                       id="text1177"><tspan
+                         sodipodi:role="line"
+                         id="tspan1175"
+                         x="268.33328"
+                         y="291.84818"
+                         style="stroke-width:0.26458332">PageHeader from And design</tspan></text>
+                  </g>
+                </g>
+              </g>
+              <g
+                 transform="translate(29.025956,-37.146878)"
+                 id="g4984">
+                <rect
+                   style="fill:#ffcc00;fill-opacity:1;stroke:#ffcc00;stroke-width:0.37078115;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none"
+                   id="rect4836"
+                   width="30.390619"
+                   height="9.0014362"
+                   x="246.96806"
+                   y="299.17661" />
+                <text
+                   id="text4842"
+                   y="306.59705"
+                   x="282.34039"
+                   style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+                   xml:space="preserve"><tspan
+                     style="stroke-width:0.26458332"
+                     y="306.59705"
+                     x="282.34039"
+                     id="tspan4840"
+                     sodipodi:role="line">Button to open entity form (create)</tspan></text>
+              </g>
+            </g>
           </g>
         </g>
       </g>

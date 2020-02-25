@@ -104,6 +104,6 @@ https://redux-toolkit.js.org/introduction/quick-start
 
 ![General Common CRUD](docs/images/common_crud.png)
 
-![Open Filters](docs/images/open_filters.png)
-
-![Open Form](docs/images/open_form.png)
+|                 Open Filters                  |                Open Form                |
+| :-------------------------------------------: | :-------------------------------------: |
+| ![Open Filters](docs/images/open_filters.png) | ![Open Form](docs/images/open_form.png) |

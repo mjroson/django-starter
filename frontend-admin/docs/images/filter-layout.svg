@@ -15,7 +15,10 @@
    height="300mm"
    width="500mm"
    sodipodi:docname="filter-layout.svg"
-   inkscape:version="0.92.3 (2405546, 2018-03-11)">
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"
+   inkscape:export-filename="/home/matias/projects/boilerplate/frontend-admin/docs/images/open_filters.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -30,12 +33,12 @@
      id="namedview1372"
      showgrid="false"
      inkscape:zoom="0.41627778"
-     inkscape:cx="729.28972"
-     inkscape:cy="718.89765"
+     inkscape:cx="649.65447"
+     inkscape:cy="1026.1872"
      inkscape:window-x="0"
      inkscape:window-y="27"
      inkscape:window-maximized="1"
-     inkscape:current-layer="g4556" />
+     inkscape:current-layer="g4561" />
   <defs
      id="defs2">
     <linearGradient
@@ -91,14 +94,14 @@
                  inkscape:export-xdpi="96"
                  inkscape:export-ydpi="96" />
               <rect
-                 style="fill:#003380;fill-opacity:0;stroke:#003380;stroke-width:1.02906537;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none"
+                 style="fill:#003380;fill-opacity:0;stroke:#c83771;stroke-width:1.03357816;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
                  id="rect2560"
-                 width="361.88376"
-                 height="59.997913"
-                 x="-176.03447"
-                 y="64.457298" />
+                 width="360.86804"
+                 height="60.695637"
+                 x="-176.03223"
+                 y="64.459557" />
               <circle
-                 style="fill:#003380;fill-opacity:1;stroke:#003380;stroke-width:0.57290977;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none"
+                 style="fill:#c83771;fill-opacity:1;stroke:#c83771;stroke-width:0.57290977;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
                  id="path2562"
                  cx="4.9074097"
                  cy="94.456253"
@@ -108,7 +111,7 @@
                id="g4561">
               <circle
                  r="5.4504952"
-                 style="fill:#003380;fill-opacity:1;stroke:#003380;stroke-width:1.00525939;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+                 style="fill:#c83771;fill-opacity:1;stroke:#c83771;stroke-width:1.00525939;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
                  id="ellipse1051"
                  cx="-216.75629"
                  cy="49.758373" />
