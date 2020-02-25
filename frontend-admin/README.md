@@ -95,3 +95,15 @@ https://ant.design/components/layout/
 
 Componentes
 https://ant.design/components/
+
+Redux ToolKit
+
+https://redux-toolkit.js.org/introduction/quick-start
+
+### Structure to create a CRUD from API Rest
+
+![General Common CRUD](docs/images/common_crud.png)
+
+![Open Filters](docs/images/open_filters.png)
+
+![Open Form](docs/images/open_form.png)

@@ -39,7 +39,7 @@ More info: https://django-extensions.readthedocs.io/en/latest/runserver_plus.htm
 
 ## Utils resources
 
-### Devops
+### Infra
 
 Use image cerbot to automatic renovation lentscrypt ssl certificate (https://github.com/wmnnd/nginx-certbot) based to https://medium.com/@pentacent/nginx-and-lets-encrypt-with-docker-in-less-than-5-minutes-b4b8a60d3a71
 
