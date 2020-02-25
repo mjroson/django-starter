@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { createReducer } from '@reduxjs/toolkit';
 
 const APIRestMaker = (function(my) {
   my.list = (params, onSuccess, onError, apiEndpoint = my.config.ApiUrl) => {
@@ -147,114 +148,111 @@ const APIRestMaker = (function(my) {
     };
   };
 
-  my.reducer = (
-    initialState,
-    reducerExtend = function(s) {
-      return s;
-    }
-  ) => {
-    return function(globalState = initialState, action) {
-      const state = reducerExtend(globalState);
-      switch (action.type) {
-        case `${my.config.entityName}/REQUESTING`:
-          return {
-            ...state,
-            reqStatus: {
-              ...state.reqStatus,
-              [action.reqName]: 'loading'
-            },
-            errors: {
-              ...state.errors,
-              [action.reqName]: null
-            }
-          };
-        case `${my.config.entityName}/REQUEST-ERROR`:
-          return {
-            ...state,
-            reqStatus: {
-              ...state.reqStatus,
-              [action.reqName]: 'loaded'
-            },
-            errors: {
-              ...state.errors,
-              [action.reqName]: action.errors
-            }
-          };
-        case `${my.config.entityName}/LIST`: {
-          const { results, count } = action.data;
-          return {
-            ...state,
-            results,
-            count,
-            reqStatus: {
-              ...state.reqStatus,
-              [action.reqName]: 'loaded'
-            },
-            errors: {
-              ...state.errors,
-              [action.reqName]: null
-            }
-          };
-        }
-        case `${my.config.entityName}/CREATE`:
-          return {
-            ...state,
-            count: state.count + 1,
-            results: [...state.results.push(action.data)],
-            loading: false,
-            reqStatus: {
-              ...state.reqStatus,
-              [action.reqName]: 'loaded'
-            },
-            errors: {
-              ...state.errors,
-              [action.reqName]: null
-            }
-          };
-        case `${my.config.entityName}/UPDATE`:
-          return {
-            ...state,
-            results: state.results.map(elem =>
-              elem.id === action.data.id ? action.data : elem
-            ),
-            loading: false,
-            reqStatus: {
-              ...state.reqStatus,
-              [action.reqName]: 'loaded'
-            },
-            errors: {
-              ...state.errors,
-              [action.reqName]: null
-            }
-          };
-        case `${my.config.entityName}/DESTROY`:
-          return {
-            ...state,
-            count: state.count - 1,
-            loading: false,
-            results: [
-              ...state.results.splice(
-                state.results.findIndex(elem => elem.id === action.data.id),
-                0
-              )
-            ],
-            reqStatus: {
-              ...state.reqStatus,
-              [action.reqName]: 'loaded'
-            },
-            errors: {
-              ...state.errors,
-              [action.reqName]: null
-            }
-          };
-        case `${my.config.entityName}/LOADING`:
-          return { ...state, loading: !state.loading };
-
-        default:
-          return state;
+  my.reducerCommonManager = () => ({
+    // Requesting
+    [`${my.config.entityName}/REQUESTING`]: (state, action) => ({
+      ...state,
+      reqStatus: {
+        ...state.reqStatus,
+        [action.reqName]: 'loading'
+      },
+      errors: {
+        ...state.errors,
+        [action.reqName]: null
       }
-    };
-  };
+    }),
+
+    // Request Error
+    [`${my.config.entityName}/REQUEST-ERROR`]: (state, action) => ({
+      ...state,
+      reqStatus: {
+        ...state.reqStatus,
+        [action.reqName]: 'loaded'
+      },
+      errors: {
+        ...state.errors,
+        [action.reqName]: action.errors
+      }
+    }),
+
+    // Receive list
+    [`${my.config.entityName}/LIST`]: (state, action) => {
+      const { results, count } = action.data;
+      return {
+        ...state,
+        results,
+        count,
+        reqStatus: {
+          ...state.reqStatus,
+          [action.reqName]: 'loaded'
+        },
+        errors: {
+          ...state.errors,
+          [action.reqName]: null
+        }
+      };
+    },
+
+    // Receive a new object
+    [`${my.config.entityName}/CREATE`]: (state, action) => ({
+      ...state,
+      count: state.count + 1,
+      results: [...state.results.push(action.data)],
+      loading: false,
+      reqStatus: {
+        ...state.reqStatus,
+        [action.reqName]: 'loaded'
+      },
+      errors: {
+        ...state.errors,
+        [action.reqName]: null
+      }
+    }),
+
+    // Receive a updated object
+    [`${my.config.entityName}/UPDATE`]: (state, action) => ({
+      ...state,
+      results: state.results.map(elem =>
+        elem.id === action.data.id ? action.data : elem
+      ),
+      loading: false,
+      reqStatus: {
+        ...state.reqStatus,
+        [action.reqName]: 'loaded'
+      },
+      errors: {
+        ...state.errors,
+        [action.reqName]: null
+      }
+    }),
+
+    // Receive a deleted object
+    [`${my.config.entityName}/DESTROY`]: (state, action) => ({
+      ...state,
+      count: state.count - 1,
+      loading: false,
+      results: [
+        ...state.results.splice(
+          state.results.findIndex(elem => elem.id === action.data.id),
+          0
+        )
+      ],
+      reqStatus: {
+        ...state.reqStatus,
+        [action.reqName]: 'loaded'
+      },
+      errors: {
+        ...state.errors,
+        [action.reqName]: null
+      }
+    })
+  });
+
+  my.reducer = (initialState, reducerCustomManager = {}) =>
+    createReducer(initialState, {
+      ...my.reducerCommonManager(),
+      ...reducerCustomManager
+    });
 
   my.make = params => {
     my.config = {
