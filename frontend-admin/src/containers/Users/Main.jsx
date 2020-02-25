@@ -174,7 +174,9 @@ const TablePage = props => {
   return (
     <>
       <Drawer
-        title={currentObj === null ? 'Crear Usuario' : 'Editar Usuario'}
+        title={
+          currentObj === null ? `Crear ${ENTITY_NAME}` : `Editar ${ENTITY_NAME}`
+        }
         width={720}
         visible={visibleForm}
         onClose={() => setVisibleForm(false)}
@@ -215,7 +217,7 @@ const TablePage = props => {
             key="new_user"
             style={{ float: 'right', marginLeft: '5px' }}
           >
-            Nuevo Usuario
+            Nuevo {ENTITY_NAME}
           </Button>
         ]}
       >
