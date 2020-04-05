@@ -1,8 +1,10 @@
 import userModel from './actions';
 
 const initialState = {
-  count: 0,
-  results: [],
+  listData: {
+    count: 0,
+    results: []
+  },
   errors: {},
   loading: false,
   reqStatus: {}

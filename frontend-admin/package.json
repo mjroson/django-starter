@@ -16,12 +16,12 @@
     "react-app-rewired": "^2.1.5",
     "react-dom": "^16.9.0",
     "react-redux": "^7.1.1",
-    "react-router-dom": "^5.0.1",
-    "react-scripts": "3.1.1",
+    "react-router-dom": "^5.1.2",
+    "react-scripts": "^3.4.1",
     "redux": "^4.0.4",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
-    "use-query-params": "^0.3.4"
+    "use-query-params": "^0.6.0"
   },
   "scripts": {
     "start": "react-app-rewired start",

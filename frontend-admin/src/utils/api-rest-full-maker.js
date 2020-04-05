@@ -3,7 +3,7 @@ import { createReducer } from '@reduxjs/toolkit';
 
 const APIRestMaker = (function(my) {
   my.list = (params, onSuccess, onError, apiEndpoint = my.config.ApiUrl) => {
-    return dispatch => {
+    return (dispatch, getState) => {
       const reqName = 'list';
       dispatch({
         type: `${my.config.entityName}/REQUESTING`,
@@ -176,22 +176,20 @@ const APIRestMaker = (function(my) {
     }),
 
     // Receive list
-    [`${my.config.entityName}/LIST`]: (state, action) => {
-      const { results, count } = action.data;
-      return {
-        ...state,
-        results,
-        count,
-        reqStatus: {
-          ...state.reqStatus,
-          [action.reqName]: 'loaded'
-        },
-        errors: {
-          ...state.errors,
-          [action.reqName]: null
-        }
-      };
-    },
+    [`${my.config.entityName}/LIST`]: (state, action) => ({
+      ...state,
+      listData: {
+        ...action.data
+      },
+      reqStatus: {
+        ...state.reqStatus,
+        [action.reqName]: 'loaded'
+      },
+      errors: {
+        ...state.errors,
+        [action.reqName]: null
+      }
+    }),
 
     // Receive a new object
     [`${my.config.entityName}/CREATE`]: (state, action) => ({

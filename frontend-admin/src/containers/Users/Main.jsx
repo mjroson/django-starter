@@ -14,10 +14,10 @@ import ObjectsTable from 'components/Table';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
+  useQueryParams,
   ArrayParam,
   NumberParam,
-  StringParam,
-  useQueryParams
+  StringParam
 } from 'use-query-params';
 import { CustomDateParam } from 'utils/filter-params';
 import { displayDate } from 'utils/formats';
@@ -26,25 +26,57 @@ import FormFilter from './components/Filter';
 import ObjectForm from './components/Form';
 import { ENTITY_NAME, ENTITY_PLURAL_NAME, PAGE_SIZE } from './constants';
 
-const TablePage = props => {
+const FILTERS = {
+  page: {
+    label: 'Pagina',
+    type: NumberParam
+  },
+  search: {
+    label: 'Buscador',
+    type: StringParam
+  },
+  ordering: {
+    label: 'Orden',
+    type: StringParam
+  },
+  first_name: {
+    label: 'Nombre',
+    type: StringParam
+  },
+  last_name: {
+    label: 'Apellido',
+    type: StringParam
+  },
+  date_joined: {
+    label: 'Fecha de registro',
+    type: CustomDateParam
+  },
+  date_joined_range: {
+    label: 'Rango de recha de registro',
+    type: ArrayParam
+  },
+  id: {
+    label: 'ID',
+    type: NumberParam
+  }
+};
+
+const filterTypeToObject = () => {
+  let obj = {};
+  for (const key in FILTERS) {
+    obj[key] = FILTERS[key].type;
+  }
+  return obj;
+};
+
+const CRUDPage = props => {
   const dispatch = useDispatch();
   const [currentObj, setCurrentObj] = useState(null);
   const [visibleFilter, setVisibleFilter] = useState(false);
   const [visibleForm, setVisibleForm] = useState(false);
-  const [query, setQuery] = useQueryParams({
-    page: NumberParam,
-    search: StringParam,
-    ordering: StringParam,
-    first_name: StringParam,
-    last_name: StringParam,
-    date_joined: CustomDateParam,
-    date_joined_range: ArrayParam,
-    id: NumberParam
-  });
 
-  const objects = useSelector(state => state.users);
+  const objects = useSelector(state => state.users.listData);
 
-  // Is it necesary or get values from objects const ?
   const reqCreateSuccess = useSelector(
     state => state.users.reqStatus.create === 'loaded'
   );
@@ -54,6 +86,8 @@ const TablePage = props => {
   const reqListLoading = useSelector(
     state => state.users.reqStatus.list !== 'loaded'
   );
+
+  const [query, setQuery] = useQueryParams(filterTypeToObject());
 
   useEffect(() => {
     // Example to dispatch list action and use success and error callBack functions (those are optionals)
@@ -71,7 +105,7 @@ const TablePage = props => {
         }
       )
     );
-  }, [query]);
+  }, [query, dispatch]);
 
   useEffect(() => {
     setCurrentObj(undefined);
@@ -105,14 +139,6 @@ const TablePage = props => {
     setQuery({ [filterKey]: undefined });
   };
 
-  const isColumnSorted = fieldName => {
-    const ordering = query.ordering || '';
-
-    if (![fieldName, `-${fieldName}`].find(s => s === ordering)) return false;
-
-    return ordering.charAt(0) !== '-' ? 'ascend' : 'descend';
-  };
-
   const OptionsTable = ({ value }) => (
     <span className="table-column-actions">
       <Popconfirm
@@ -136,28 +162,24 @@ const TablePage = props => {
     {
       title: 'Id',
       dataIndex: 'id',
-      sorter: true,
-      sortOrder: isColumnSorted('id')
+      sorter: true
     },
     {
       title: 'Nombre y Apellido',
       dataIndex: 'last_name',
       render: (text, obj) => `${obj.last_name}, ${obj.first_name}`,
-      sorter: true,
-      sortOrder: isColumnSorted('last_name')
+      sorter: true
     },
     {
       title: 'Email Principal',
       dataIndex: 'email',
-      sorter: true,
-      sortOrder: isColumnSorted('email')
+      sorter: true
     },
     {
       title: 'Fecha de registro',
       dataIndex: 'date_joined',
       render: date => displayDate(date),
-      sorter: true,
-      sortOrder: isColumnSorted('date_joined')
+      sorter: true
     },
     {
       title: 'Activo',
@@ -264,4 +286,4 @@ const TablePage = props => {
   );
 };
 
-export default TablePage;
+export default CRUDPage;
