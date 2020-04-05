@@ -7,11 +7,11 @@ const AppliedFilters = ({ filters, removeFilter }) => {
       key => filters[key] !== undefined && key !== 'page'
     ) || [];
 
-  const processChild = child => {
-    if (child._isAMomentObject) {
-      return child.format('DD-MM-YYYY');
+  const displayValue = value => {
+    if (value._isAMomentObject) {
+      return value.format('DD-MM-YYYY');
     }
-    return child;
+    return value;
   };
 
   return (
@@ -19,7 +19,7 @@ const AppliedFilters = ({ filters, removeFilter }) => {
       <b>Filtros aplicados: </b>
       {activeFiltersKeys.map((key, index) => (
         <Tag closable onClose={() => removeFilter(key)} key={index} visible>
-          {key}:{processChild(filters[key])}
+          {key}:{displayValue(filters[key])}
         </Tag>
       ))}
       {activeFiltersKeys.length === 0 &&

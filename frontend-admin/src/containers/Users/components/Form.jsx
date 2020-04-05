@@ -1,12 +1,9 @@
 import React, { useEffect } from 'react';
 import { Form, Input, Button, Switch } from 'antd';
-import { useDispatch } from 'react-redux';
-import { update, create } from '../actions';
 
 const FormItem = Form.Item;
 
-const ObjectForm = ({ currentObj, onClose, form }) => {
-  const dispatch = useDispatch();
+const ObjectForm = ({ currentObj, onClose, form, update, create }) => {
   const { getFieldDecorator } = form;
 
   useEffect(() => {
@@ -27,9 +24,9 @@ const ObjectForm = ({ currentObj, onClose, form }) => {
           obj[key] = values[key];
         });
         if (currentObj) {
-          dispatch(update(obj));
+          update(obj);
         } else {
-          dispatch(create(obj));
+          create(obj);
         }
       }
     });

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Table } from 'antd';
 
 const ObjectsTable = props => {
@@ -9,27 +9,24 @@ const ObjectsTable = props => {
     onChangeParams,
     sortedField,
     onChangePage,
-    sorted,
     columns,
     ...otherTableParams
   } = props;
 
   const handleTableChange = (currentPagination, filters, sorter) => {
+    /**
+     * Listen to table change for manager pagination and ordering.
+     */
     if (pagination.current !== currentPagination.current) {
       onChangePage(currentPagination.current);
     } else {
       if (sorter && sorter.field) {
-        let ordering = '';
+        const ordering = `${
+          sortedField.charAt(0) !== '-' && sortedField === sorter.field
+            ? '-'
+            : ''
+        }${sorter.field}`;
 
-        if (sortedField.charAt(0) === '-') {
-          ordering = sorter.field;
-        } else {
-          if (sortedField === sorter.field) {
-            ordering = `-${sorter.field}`;
-          } else {
-            ordering = sorter.field;
-          }
-        }
         onChangeParams({ ordering });
         return;
       }
@@ -37,9 +34,33 @@ const ObjectsTable = props => {
     }
   };
 
+  const [formatedColumns, setFormatedColumns] = useState([]);
+
+  const isColumnSorted = fieldName => {
+    /**
+     * Checking if column is sorted.
+     */
+    if (![fieldName, `-${fieldName}`].find(s => s === sortedField))
+      return false;
+
+    return sortedField.charAt(0) !== '-' ? 'ascend' : 'descend';
+  };
+
+  useEffect(() => {
+    /**
+     * Formated column, added sortOrder atribute
+     */
+    setFormatedColumns(
+      columns.map(column => {
+        column.sortOrder = isColumnSorted(column.dataIndex);
+        return column;
+      })
+    );
+  }, [columns]);
+
   return (
     <Table
-      columns={columns}
+      columns={formatedColumns}
       rowKey={obj => obj.id}
       dataSource={results}
       pagination={pagination}

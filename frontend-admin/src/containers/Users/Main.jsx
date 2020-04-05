@@ -1,41 +1,82 @@
-import { Button, Col, Drawer, Icon, PageHeader, Popconfirm, Row } from 'antd';
+import {
+  Button,
+  Col,
+  Drawer,
+  Icon,
+  PageHeader,
+  Popconfirm,
+  Row,
+  message
+} from 'antd';
 import AppliedFilters from 'components/AppliedFilters';
 import SearchForm from 'components/SearchForm';
 import ObjectsTable from 'components/Table';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
+  useQueryParams,
   ArrayParam,
   NumberParam,
-  StringParam,
-  useQueryParams
+  StringParam
 } from 'use-query-params';
 import { CustomDateParam } from 'utils/filter-params';
 import { displayDate } from 'utils/formats';
-import { destroy, list } from './actions';
+import userModel from './actions';
 import FormFilter from './components/Filter';
 import ObjectForm from './components/Form';
 import { ENTITY_NAME, ENTITY_PLURAL_NAME, PAGE_SIZE } from './constants';
 
-const TablePage = props => {
+const FILTERS = {
+  page: {
+    label: 'Pagina',
+    type: NumberParam
+  },
+  search: {
+    label: 'Buscador',
+    type: StringParam
+  },
+  ordering: {
+    label: 'Orden',
+    type: StringParam
+  },
+  first_name: {
+    label: 'Nombre',
+    type: StringParam
+  },
+  last_name: {
+    label: 'Apellido',
+    type: StringParam
+  },
+  date_joined: {
+    label: 'Fecha de registro',
+    type: CustomDateParam
+  },
+  date_joined_range: {
+    label: 'Rango de recha de registro',
+    type: ArrayParam
+  },
+  id: {
+    label: 'ID',
+    type: NumberParam
+  }
+};
+
+const filterTypeToObject = () => {
+  let obj = {};
+  for (const key in FILTERS) {
+    obj[key] = FILTERS[key].type;
+  }
+  return obj;
+};
+
+const CRUDPage = props => {
   const dispatch = useDispatch();
   const [currentObj, setCurrentObj] = useState(null);
   const [visibleFilter, setVisibleFilter] = useState(false);
   const [visibleForm, setVisibleForm] = useState(false);
-  const [query, setQuery] = useQueryParams({
-    page: NumberParam,
-    search: StringParam,
-    ordering: StringParam,
-    first_name: StringParam,
-    last_name: StringParam,
-    date_joined: CustomDateParam,
-    date_joined_range: ArrayParam,
-    id: NumberParam
-  });
 
-  const objects = useSelector(state => state.users);
+  const objects = useSelector(state => state.users.listData);
 
-  // Is it necesary or get values from objects const ?
   const reqCreateSuccess = useSelector(
     state => state.users.reqStatus.create === 'loaded'
   );
@@ -46,9 +87,25 @@ const TablePage = props => {
     state => state.users.reqStatus.list !== 'loaded'
   );
 
+  const [query, setQuery] = useQueryParams(filterTypeToObject());
+
   useEffect(() => {
-    dispatch(list(query));
-  }, [query]);
+    // Example to dispatch list action and use success and error callBack functions (those are optionals)
+    dispatch(
+      userModel.list(
+        query,
+        data => {
+          console.log('Success callback user list ', data);
+        },
+        error => {
+          console.log(error);
+          message.error(
+            `Hubo un error al intentar recuperar el listado de ${ENTITY_PLURAL_NAME}`
+          );
+        }
+      )
+    );
+  }, [query, dispatch]);
 
   useEffect(() => {
     setCurrentObj(undefined);
@@ -82,73 +139,66 @@ const TablePage = props => {
     setQuery({ [filterKey]: undefined });
   };
 
-  const isColumnSorted = fieldName => {
-    const sorted = query.ordering || '';
-    return [fieldName, `-${fieldName}`].includes(sorted)
-      ? sorted.charAt(0) !== '-'
-        ? 'ascend'
-        : 'descend'
-      : false;
-  };
+  const OptionsTable = ({ value }) => (
+    <span className="table-column-actions">
+      <Popconfirm
+        title={`¿Desea eliminar este ${ENTITY_NAME}?`}
+        onConfirm={() => dispatch(userModel.destroy(value))}
+      >
+        <Icon type="delete" />
+      </Popconfirm>
+      <Icon type="form" onClick={() => onUpdate(value)} />
+    </span>
+  );
+
+  const ActiveIcon = ({ value }) =>
+    value ? (
+      <Icon type="check-circle" theme="twoTone" twoToneColor="#52c41a" />
+    ) : (
+      <Icon type="minus-circle" theme="twoTone" twoToneColor="#ff4747" />
+    );
 
   const columns = [
     {
       title: 'Id',
       dataIndex: 'id',
-      sorter: true,
-      sortOrder: isColumnSorted('id')
+      sorter: true
     },
     {
       title: 'Nombre y Apellido',
       dataIndex: 'last_name',
       render: (text, obj) => `${obj.last_name}, ${obj.first_name}`,
-      sorter: true,
-      sortOrder: isColumnSorted('last_name')
+      sorter: true
     },
     {
       title: 'Email Principal',
       dataIndex: 'email',
-      sorter: true,
-      sortOrder: isColumnSorted('email')
+      sorter: true
     },
     {
       title: 'Fecha de registro',
       dataIndex: 'date_joined',
       render: date => displayDate(date),
-      sorter: true,
-      sortOrder: isColumnSorted('date_joined')
+      sorter: true
     },
     {
       title: 'Activo',
       dataIndex: 'is_active',
-      render: value =>
-        value ? (
-          <Icon type="check-circle" theme="twoTone" twoToneColor="#52c41a" />
-        ) : (
-          <Icon type="minus-circle" theme="twoTone" twoToneColor="#ff4747" />
-        )
+      render: value => <ActiveIcon value={value} />
     },
     {
       title: 'Acciones',
       key: 'operation',
-      render: obj => (
-        <span className="table-column-actions">
-          <Popconfirm
-            title={`¿Desea eliminar este ${ENTITY_NAME}?`}
-            onConfirm={() => dispatch(destroy(obj))}
-          >
-            <a>Eliminar</a>
-          </Popconfirm>
-          <a onClick={() => onUpdate(obj)}>Editar</a>
-        </span>
-      )
+      render: obj => <OptionsTable value={obj} />
     }
   ];
 
   return (
     <>
       <Drawer
-        title={currentObj === null ? 'Crear Usuario' : 'Editar Usuario'}
+        title={
+          currentObj === null ? `Crear ${ENTITY_NAME}` : `Editar ${ENTITY_NAME}`
+        }
         width={720}
         visible={visibleForm}
         onClose={() => setVisibleForm(false)}
@@ -160,6 +210,8 @@ const TablePage = props => {
         <ObjectForm
           currentObj={currentObj}
           onClose={() => setVisibleForm(false)}
+          create={data => dispatch(userModel.create(data))}
+          update={data => dispatch(userModel.update(data))}
         />
       </Drawer>
 
@@ -187,7 +239,7 @@ const TablePage = props => {
             key="new_user"
             style={{ float: 'right', marginLeft: '5px' }}
           >
-            Nuevo Usuario
+            Nuevo {ENTITY_NAME}
           </Button>
         ]}
       >
@@ -234,4 +286,4 @@ const TablePage = props => {
   );
 };
 
-export default TablePage;
+export default CRUDPage;
