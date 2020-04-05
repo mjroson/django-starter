@@ -1,0 +1,14 @@
+version: '3.7'
+services:
+  node:
+    image: node:11.15.0
+    command: bash -c "npm start"
+    working_dir: '/app'
+    volumes:
+      - .:/app
+    ports:
+      - '3000:3000'
+      - '3001:3001'
+    env_file: .env
+    environment:
+      - PORT=3000

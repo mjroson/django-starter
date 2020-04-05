@@ -14,7 +14,6 @@ tests/coverage_html/
 tests/.coverage
 tests/report/
 .directory
-*.less
 *.log
 **/.sass-cache/
 **/CACHE/

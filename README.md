@@ -39,7 +39,7 @@ More info: https://django-extensions.readthedocs.io/en/latest/runserver_plus.htm
 
 ## Utils resources
 
-### Devops
+### Infra
 
 Use image cerbot to automatic renovation lentscrypt ssl certificate (https://github.com/wmnnd/nginx-certbot) based to https://medium.com/@pentacent/nginx-and-lets-encrypt-with-docker-in-less-than-5-minutes-b4b8a60d3a71
 
@@ -51,8 +51,14 @@ https://github.com/django-extensions/django-extensions
 Django Rest framework
 https://www.django-rest-framework.org/
 
+JSON Web Token for django rest framework
+https://github.com/davesque/django-rest-framework-simplejwt
+
 Celery with django
 https://docs.celeryproject.org/en/latest/django/first-steps-with-django.html
+
+Support to CORS HEADER
+https://github.com/adamchainz/django-cors-headers
 
 Celery task results in django admin
 http://docs.celeryproject.org/en/latest/django/first-steps-with-django.html#django-celery-results-using-the-django-orm-cache-as-a-result-backend
