@@ -92,7 +92,7 @@ const CRUDPage = props => {
   useEffect(() => {
     // Example to dispatch list action and use success and error callBack functions (those are optionals)
     dispatch(
-      userModel.list(
+      userModel.actions.list(
         query,
         data => {
           console.log('Success callback user list ', data);
@@ -143,7 +143,7 @@ const CRUDPage = props => {
     <span className="table-column-actions">
       <Popconfirm
         title={`¿Desea eliminar este ${ENTITY_NAME}?`}
-        onConfirm={() => dispatch(userModel.destroy(value))}
+        onConfirm={() => dispatch(userModel.actions.destroy(value))}
       >
         <Icon type="delete" />
       </Popconfirm>
@@ -194,7 +194,7 @@ const CRUDPage = props => {
   ];
 
   return (
-    <>
+    <div className="generic-crud-section">
       <Drawer
         title={
           currentObj === null ? `Crear ${ENTITY_NAME}` : `Editar ${ENTITY_NAME}`
@@ -210,8 +210,8 @@ const CRUDPage = props => {
         <ObjectForm
           currentObj={currentObj}
           onClose={() => setVisibleForm(false)}
-          create={data => dispatch(userModel.create(data))}
-          update={data => dispatch(userModel.update(data))}
+          create={data => dispatch(userModel.actions.create(data))}
+          update={data => dispatch(userModel.actions.update(data))}
         />
       </Drawer>
 
@@ -232,12 +232,13 @@ const CRUDPage = props => {
         title={ENTITY_PLURAL_NAME}
         onBack={() => window.history.back()}
         subTitle="listado de usuarios registrados"
+        className="page-header"
         extra={[
           <Button
             type="primary"
             onClick={() => onCreate()}
+            className="btn-actions"
             key="new_user"
-            style={{ float: 'right', marginLeft: '5px' }}
           >
             Nuevo {ENTITY_NAME}
           </Button>
@@ -282,7 +283,7 @@ const CRUDPage = props => {
           tableLayout="auto"
         />
       </PageHeader>
-    </>
+    </div>
   );
 };
 

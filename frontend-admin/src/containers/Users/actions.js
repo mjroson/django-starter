@@ -1,4 +1,4 @@
-import APIRestMaker from 'utils/api-rest-full-maker';
+import APIRestMaker from 'utils/magic-redux-rest';
 
 import { ENDPOINT, ENTITY_NAME, ENTITY_PLURAL_NAME } from './constants';
 
