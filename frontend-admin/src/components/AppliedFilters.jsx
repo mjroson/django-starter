@@ -1,7 +1,7 @@
 import React from 'react';
 import { Tag } from 'antd';
 
-const AppliedFilters = ({ filters, removeFilter }) => {
+const AppliedFilters = ({ filters, removeFilter, configFilters = {} }) => {
   const activeFiltersKeys =
     Object.keys(filters).filter(
       key => filters[key] !== undefined && key !== 'page'
@@ -13,13 +13,14 @@ const AppliedFilters = ({ filters, removeFilter }) => {
     }
     return value;
   };
+  const displayLabel = label => configFilters[label]?.label ?? label;
 
   return (
     <>
       <b>Filtros aplicados: </b>
       {activeFiltersKeys.map((key, index) => (
         <Tag closable onClose={() => removeFilter(key)} key={index} visible>
-          {key}:{displayValue(filters[key])}
+          <b>{displayLabel(key)}</b> : {displayValue(filters[key])}
         </Tag>
       ))}
       {activeFiltersKeys.length === 0 &&
