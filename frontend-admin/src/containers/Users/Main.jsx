@@ -21,6 +21,8 @@ import {
 } from 'use-query-params';
 import { CustomDateParam } from 'utils/filter-params';
 import { displayDate } from 'utils/formats';
+import { widhFilters } from 'utils/crud-hoc';
+
 import userModel from './actions';
 import FormFilter from './components/Filter';
 import ObjectForm from './components/Form';
@@ -29,47 +31,47 @@ import { ENTITY_NAME, ENTITY_PLURAL_NAME, PAGE_SIZE } from './constants';
 const FILTERS = {
   page: {
     label: 'Pagina',
-    type: NumberParam
+    type: NumberParam,
+    inForm: false
   },
   search: {
     label: 'Buscador',
-    type: StringParam
+    type: StringParam,
+    inForm: false
   },
   ordering: {
     label: 'Orden',
-    type: StringParam
+    type: StringParam,
+    inForm: false
   },
   first_name: {
     label: 'Nombre',
-    type: StringParam
+    type: StringParam,
+    inForm: true
   },
   last_name: {
     label: 'Apellido',
-    type: StringParam
+    type: StringParam,
+    inForm: true
   },
   date_joined: {
     label: 'Fecha de registro',
-    type: CustomDateParam
+    type: CustomDateParam,
+    inForm: true
   },
   date_joined_range: {
     label: 'Rango de recha de registro',
-    type: ArrayParam
+    type: ArrayParam,
+    inForm: true
   },
   id: {
     label: 'ID',
-    type: NumberParam
+    type: NumberParam,
+    inForm: false
   }
 };
 
-const filterTypeToObject = () => {
-  let obj = {};
-  for (const key in FILTERS) {
-    obj[key] = FILTERS[key].type;
-  }
-  return obj;
-};
-
-const CRUDPage = props => {
+const CRUDPage = ({ filters }) => {
   const dispatch = useDispatch();
   const [currentObj, setCurrentObj] = useState(null);
   const [visibleFilter, setVisibleFilter] = useState(false);
@@ -87,7 +89,7 @@ const CRUDPage = props => {
     state => state.users.reqStatus.list !== 'loaded'
   );
 
-  const [query, setQuery] = useQueryParams(filterTypeToObject());
+  const [query, setQuery] = useQueryParams(filters);
 
   useEffect(() => {
     // Example to dispatch list action and use success and error callBack functions (those are optionals)
@@ -185,12 +187,12 @@ const CRUDPage = props => {
     {
       title: 'Activo',
       dataIndex: 'is_active',
-      render: value => <ActiveIcon value={value} />
+      render: value => ActiveIcon({ value })
     },
     {
       title: 'Acciones',
       key: 'operation',
-      render: obj => <OptionsTable value={obj} />
+      render: obj => OptionsTable({ value: obj })
     }
   ];
 
@@ -227,7 +229,8 @@ const CRUDPage = props => {
         <FormFilter
           onSubmit={applyFilter}
           onCancel={() => setVisibleFilter(false)}
-          filters={query}
+          filtersData={FILTERS}
+          appliedFilters={query}
         />
       </Drawer>
       <PageHeader
@@ -257,7 +260,11 @@ const CRUDPage = props => {
         </Row>
         <Row className="form-filters">
           <Col md={22} sm={24} className="container-applied-filters">
-            <AppliedFilters filters={query} removeFilter={removeFilter} />
+            <AppliedFilters
+              filters={query}
+              removeFilter={removeFilter}
+              configFilters={FILTERS}
+            />
           </Col>
           <Col md={2} sm={24}>
             <Button
@@ -294,4 +301,4 @@ const CRUDPage = props => {
   );
 };
 
-export default CRUDPage;
+export default widhFilters(CRUDPage, FILTERS);

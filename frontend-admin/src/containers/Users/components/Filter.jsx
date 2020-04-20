@@ -4,14 +4,30 @@ import React, { useEffect } from 'react';
 const FormItem = Form.Item;
 const { RangePicker } = DatePicker;
 
-const FilterForm = ({ onSubmit, onCancel, filters, form }) => {
+const FilterForm = ({
+  onSubmit,
+  onCancel,
+  appliedFilters,
+  filtersData,
+  form
+}) => {
   const { getFieldDecorator } = form;
 
-  useEffect(() => {
-    if (filters != null) {
-      form.setFieldsValue({ ...filters });
+  const getFilterDataToForm = () => {
+    const data = {};
+    for (const [key, value] of Object.entries(appliedFilters)) {
+      if (filtersData[key]?.inForm) {
+        data[key] = value;
+      }
     }
-  }, [filters]); // eslint-disable-line react-hooks/exhaustive-deps
+    return data;
+  };
+
+  useEffect(() => {
+    if (appliedFilters != null) {
+      form.setFieldsValue({ ...getFilterDataToForm() });
+    }
+  }, [appliedFilters]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleSubmit = e => {
     e.preventDefault();
