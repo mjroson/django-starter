@@ -79,10 +79,14 @@ const FilterForm = ({ onSubmit, onCancel, filters, form }) => {
         </Col>
       </Row>
       <div className="drawer-footer">
-        <Button type="secondary" onClick={onCancel} style={{ marginRight: 8 }}>
+        <Button
+          type="secondary"
+          onClick={onCancel}
+          className="btn-forms-action"
+        >
           Cancelar
         </Button>
-        <Button type="primary" htmlType="submit">
+        <Button type="primary" htmlType="submit" className="btn-forms-action">
           Aplicar filtros
         </Button>
       </div>
