@@ -7,7 +7,6 @@ const ObjectForm = ({ currentObj, onClose, form, update, create }) => {
   const { getFieldDecorator } = form;
 
   useEffect(() => {
-    console.log('Use efect object form ', currentObj);
     if (currentObj != null) {
       form.setFieldsValue({ ...currentObj });
     } else {
@@ -62,10 +61,10 @@ const ObjectForm = ({ currentObj, onClose, form, update, create }) => {
       </FormItem>
 
       <div className="drawer-footer">
-        <Button onClick={onClose} style={{ marginRight: 8 }}>
+        <Button onClick={onClose} className="btn-forms-action">
           Cancelar
         </Button>
-        <Button htmlType="submit" type="primary">
+        <Button htmlType="submit" type="primary" className="btn-forms-action">
           {`${currentObj === null ? 'Crear' : 'Actualizar'}`}
         </Button>
       </div>

@@ -44,4 +44,52 @@
       margin-left: 5px;
     }
   }
+  .search-icon {
+    color: rgba(0, 0, 0, 0.25);
+  }
+
+  .btn-forms-action:not(:last-child) {
+    margin-right: 8px;
+  }
+
+  .ant-drawer-horizontal .ant-drawer-content-wrapper {
+    width: 700px !important;
+  }
+
+  .form-filters {
+    min-height: 50px;
+    margin-top: 15px;
+
+    .btn-open-filters-form {
+      float: right;
+    }
+  }
+}
+
+.ant-calendar-picker {
+  width: 100%;
+}
+
+/* Fix mobile general styles */
+@media screen and (max-width: 700px) {
+  .generic-crud-section {
+    .ant-page-header.page-header.ant-page-header-ghost {
+      padding: 0px;
+    }
+
+    .ant-input-search.ant-input-search-enter-button.ant-input-group-wrapper {
+      width: 100% !important;
+    }
+    .form-filters .btn-open-filters-form {
+      width: 100%;
+    }
+  }
+
+  .ant-drawer-vertical .ant-drawer-content-wrapper {
+    height: 100vh !important;
+  }
+
+  .ant-drawer-horizontal .ant-drawer-content-wrapper {
+    width: 100% !important;
+  }
 }

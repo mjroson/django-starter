@@ -98,10 +98,11 @@ const CRUDPage = props => {
           console.log('Success callback user list ', data);
         },
         error => {
-          console.log(error);
-          message.error(
-            `Hubo un error al intentar recuperar el listado de ${ENTITY_PLURAL_NAME}`
-          );
+          if (error.status !== 401) {
+            message.error(
+              `Hubo un error al intentar recuperar el listado de ${ENTITY_PLURAL_NAME}`
+            );
+          }
         }
       )
     );
@@ -199,7 +200,7 @@ const CRUDPage = props => {
         title={
           currentObj === null ? `Crear ${ENTITY_NAME}` : `Editar ${ENTITY_NAME}`
         }
-        width={720}
+        className="ant-drawer-horizontal"
         visible={visibleForm}
         onClose={() => setVisibleForm(false)}
         style={{
@@ -219,6 +220,7 @@ const CRUDPage = props => {
         title="Filtros"
         placement="top"
         closable={false}
+        className="ant-drawer-vertical"
         onClose={() => setVisibleFilter(false)}
         visible={visibleFilter}
       >
@@ -245,20 +247,25 @@ const CRUDPage = props => {
         ]}
       >
         <Row>
-          <Col span={12}>
+          <Col md={12} sm={24}>
             <SearchForm
               submit={search}
               searchValue={query.search || ''}
               placeholder="Ingrese email, nombre o apellido"
             />
           </Col>
-          <Col span={12} className="container-general-actions-right">
-            <Button onClick={() => setVisibleFilter(true)}>Filtros</Button>
-          </Col>
         </Row>
-        <Row>
-          <Col span={24} className="container-applied-filters">
+        <Row className="form-filters">
+          <Col md={22} sm={24} className="container-applied-filters">
             <AppliedFilters filters={query} removeFilter={removeFilter} />
+          </Col>
+          <Col md={2} sm={24}>
+            <Button
+              onClick={() => setVisibleFilter(true)}
+              className="btn-open-filters-form"
+            >
+              Filtros
+            </Button>
           </Col>
         </Row>
 
