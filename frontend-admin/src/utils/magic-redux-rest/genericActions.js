@@ -27,7 +27,10 @@ const generateactions = (entityName, APIUrl) => ({
             errors: e.response ? e.response.data : null
           });
           if (typeof onError === 'function') {
-            onError(e.response ? e.response.data : null);
+            onError({
+              data: e.response ? e.response.data : null,
+              status: e.response?.status ?? undefined
+            });
           }
         });
     };

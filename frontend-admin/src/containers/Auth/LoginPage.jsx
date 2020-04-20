@@ -9,7 +9,12 @@ const LoginPage = props => {
   const redirect = () => {
     const query = new URLSearchParams(window.location.search);
     const next = query.get('next');
-    if (next && next !== null && next !== '') {
+    if (
+      next &&
+      next !== null &&
+      next !== '' &&
+      window.location.pathname !== next
+    ) {
       history.push(next);
     } else {
       history.push('/');

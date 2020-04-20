@@ -3,12 +3,11 @@ import './global.less';
 import { Router, Route, Switch } from 'react-router-dom';
 import { QueryParamProvider } from 'use-query-params';
 import { Provider } from 'react-redux';
-import { createBrowserHistory } from 'history';
 import indexRoutes from './routes/index.jsx';
 import store from './store';
-import './config/axios_conf';
+import hist from './history';
 
-const hist = createBrowserHistory();
+import './config/axios_conf';
 
 const App = props => (
   <Provider store={store}>

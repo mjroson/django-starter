@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Layout, Menu, Icon, Dropdown, Button } from 'antd';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import Logo from 'components/icons/logo';
@@ -80,12 +80,6 @@ const Dashboard = ({ history }) => {
   const onClickMenuItem = (item, index, selectedKeys) => {
     history.push(item.item.props.path);
   };
-
-  useEffect(() => {
-    if (!window.localStorage.getItem('token')) {
-      history.replace('/login');
-    }
-  }, []);
 
   return (
     <Layout>
