@@ -8,7 +8,7 @@ const SearchForm = ({ searchValue = '', submit, placeholder = '' }) => {
     <Search
       placeholder={placeholder}
       className="search-input"
-      value={searchValue}
+      defaultValue={searchValue}
       onSearch={value => submit(value)}
       style={{ width: '80%' }}
       enterButton
