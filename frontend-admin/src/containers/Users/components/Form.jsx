@@ -3,7 +3,14 @@ import { Form, Input, Button, Switch } from 'antd';
 
 const FormItem = Form.Item;
 
-const ObjectForm = ({ currentObj, onClose, form, update, create }) => {
+const ObjectForm = ({
+  currentObj,
+  onClose,
+  form,
+  create,
+  update,
+  formErrors
+}) => {
   const { getFieldDecorator } = form;
 
   useEffect(() => {
@@ -13,6 +20,23 @@ const ObjectForm = ({ currentObj, onClose, form, update, create }) => {
       form.resetFields();
     }
   }, [currentObj]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    /**
+     * Handler error from models.
+     */
+    if (formErrors) {
+      const errorsData = {};
+      const formValues = form.getFieldsValue();
+      Object.keys(formErrors).forEach(key => {
+        errorsData[key] = {
+          value: formValues[key],
+          errors: formErrors[key].map(errorMsg => new Error(errorMsg))
+        };
+      });
+      form.setFields(errorsData);
+    }
+  }, [formErrors]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleSubmit = e => {
     e.preventDefault();

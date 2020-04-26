@@ -23,7 +23,7 @@ import { CustomDateParam } from 'utils/filter-params';
 import { displayDate } from 'utils/formats';
 import { widhFilters } from 'utils/crud-hoc';
 
-import userModel from './actions';
+import { userActions } from './data/models';
 import FormFilter from './components/Filter';
 import ObjectForm from './components/Form';
 import { ENTITY_NAME, ENTITY_PLURAL_NAME, PAGE_SIZE } from './constants';
@@ -77,7 +77,7 @@ const CRUDPage = ({ filters }) => {
   const [visibleFilter, setVisibleFilter] = useState(false);
   const [visibleForm, setVisibleForm] = useState(false);
 
-  const objects = useSelector(state => state.users.listData);
+  const objects = useSelector(state => state.users?.listData);
 
   const reqCreateSuccess = useSelector(
     state => state.users.reqStatus.create === 'loaded'
@@ -85,6 +85,10 @@ const CRUDPage = ({ filters }) => {
   const reqUpdateSuccess = useSelector(
     state => state.users.reqStatus.update === 'loaded'
   );
+
+  const formErrors = useSelector(state => {
+    return state.users.errors.create || state.users.errors.update;
+  });
   const reqListLoading = useSelector(
     state => state.users.reqStatus.list !== 'loaded'
   );
@@ -93,27 +97,31 @@ const CRUDPage = ({ filters }) => {
 
   useEffect(() => {
     // Example to dispatch list action and use success and error callBack functions (those are optionals)
-    dispatch(
-      userModel.actions.list(
-        query,
-        data => {
-          console.log('Success callback user list ', data);
-        },
-        error => {
-          if (error.status !== 401) {
-            message.error(
-              `Hubo un error al intentar recuperar el listado de ${ENTITY_PLURAL_NAME}`
-            );
+    if (userActions) {
+      dispatch(
+        userActions.list(
+          query,
+          data => {
+            console.log('Success callback user list ', data);
+          },
+          error => {
+            if (error.status !== 401) {
+              message.error(
+                `Hubo un error al intentar recuperar el listado de ${ENTITY_PLURAL_NAME}`
+              );
+            }
           }
-        }
-      )
-    );
-  }, [query, dispatch]);
+        )
+      );
+    }
+  }, [query, userActions]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    setCurrentObj(undefined);
-    setVisibleForm(false);
-  }, [reqCreateSuccess, reqUpdateSuccess]);
+    if (!formErrors) {
+      setCurrentObj(undefined);
+      setVisibleForm(false);
+    }
+  }, [formErrors, reqCreateSuccess, reqUpdateSuccess]);
 
   const onChangeParams = params => {
     setQuery({ ...params, page: 1 });
@@ -146,7 +154,7 @@ const CRUDPage = ({ filters }) => {
     <span className="table-column-actions">
       <Popconfirm
         title={`¿Desea eliminar este ${ENTITY_NAME}?`}
-        onConfirm={() => dispatch(userModel.actions.destroy(value))}
+        onConfirm={() => dispatch(userActions.destroy(value))}
       >
         <Icon type="delete" />
       </Popconfirm>
@@ -213,8 +221,9 @@ const CRUDPage = ({ filters }) => {
         <ObjectForm
           currentObj={currentObj}
           onClose={() => setVisibleForm(false)}
-          create={data => dispatch(userModel.actions.create(data))}
-          update={data => dispatch(userModel.actions.update(data))}
+          formErrors={formErrors}
+          create={data => dispatch(userActions.create(data))}
+          update={data => dispatch(userActions.update(data))}
         />
       </Drawer>
 
