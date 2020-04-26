@@ -6,7 +6,7 @@ import {
   LogoutOutlined,
   UserOutlined
 } from '@ant-design/icons';
-import Logo from 'components/icons/logo';
+import Logo from 'components/icons/Logo';
 import dashboardRoutes from 'routes/dashboard';
 import './index.less';
 
@@ -90,7 +90,8 @@ const Dashboard = ({ history }) => {
     <Layout>
       <Sider
         breakpoint="lg"
-        collapsedWidth="0"
+        collapsedWidth={window.innerWidth > 700 ? undefined : '0'}
+        collapsible
         onBreakpoint={broken => {
           console.log(broken);
         }}
