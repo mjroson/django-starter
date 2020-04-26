@@ -19,6 +19,7 @@ tests/report/
 **/CACHE/
 **/media
 
+frontend-admin/
 .vscode/
 
 **/migrations/00*
