@@ -3,9 +3,7 @@ import { Tag } from 'antd';
 
 const AppliedFilters = ({ filters, removeFilter, configFilters = {} }) => {
   const activeFiltersKeys =
-    Object.keys(filters).filter(
-      key => filters[key] !== undefined && key !== 'page'
-    ) || [];
+    Object.keys(filters).filter(key => filters[key] !== undefined) || [];
 
   const displayValue = value => {
     if (value._isAMomentObject) {

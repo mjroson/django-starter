@@ -1,33 +1,39 @@
 import DashboardPage from 'containers/Dashboard/DashboardPage';
 import UserPage from 'containers/Users/Main';
+import {
+  DashboardOutlined,
+  UserOutlined,
+  BankOutlined,
+  RightCircleOutlined
+} from '@ant-design/icons';
 
 const dashboardRoutes = [
   {
     path: '/dashboard',
     sidebarName: 'Dashboard',
     navbarName: 'Boilerplate dashboard',
-    icon: 'dashboard',
+    Icon: DashboardOutlined,
     component: DashboardPage
   },
   {
     path: '/users',
     sidebarName: 'Usuarios',
     navbarName: 'Material Dashboard',
-    icon: 'user',
+    Icon: UserOutlined,
     component: UserPage
   },
   {
     sidebarName: 'Submenu',
-    icon: 'bank',
+    Icon: BankOutlined,
     submenu: [
       {
         sidebarName: 'Item 1',
-        icon: 'right-circle',
+        Icon: RightCircleOutlined,
         path: '/dummy-page-1'
       },
       {
         sidebarName: 'Item 2',
-        icon: 'right-circle',
+        Icon: RightCircleOutlined,
         path: '/dummy-page-2'
       }
     ]

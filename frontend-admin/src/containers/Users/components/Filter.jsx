@@ -1,17 +1,10 @@
-import { Button, Col, Form, Input, Row, DatePicker } from 'antd';
+import { Button, Form, Input, DatePicker } from 'antd';
 import React, { useEffect } from 'react';
 
-const FormItem = Form.Item;
 const { RangePicker } = DatePicker;
 
-const FilterForm = ({
-  onSubmit,
-  onCancel,
-  appliedFilters,
-  filtersData,
-  form
-}) => {
-  const { getFieldDecorator } = form;
+const FilterForm = ({ onSubmit, onCancel, appliedFilters, filtersData }) => {
+  const [form] = Form.useForm();
 
   const getFilterDataToForm = () => {
     const data = {};
@@ -29,71 +22,28 @@ const FilterForm = ({
     }
   }, [appliedFilters]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const handleSubmit = e => {
-    e.preventDefault();
-    form.validateFields((err, values) => {
-      if (!err) {
-        onSubmit(values);
-      }
-    });
-  };
-
-  const formItemLayout = {
-    labelCol: {
-      xs: { span: 24 },
-      sm: { span: 8 }
-    },
-    wrapperCol: {
-      xs: { span: 24 },
-      sm: { span: 16 }
-    }
-  };
-
   return (
-    <Form {...formItemLayout} onSubmit={handleSubmit} className="card-block">
-      <Row>
-        <Col sm={24} md={8}>
-          <FormItem label="Nombre">
-            {getFieldDecorator(
-              'first_name',
-              {}
-            )(<Input placeholder="Ingresa el nombre completo" />)}
-          </FormItem>
-        </Col>
-        <Col sm={24} md={8}>
-          <FormItem label="Apellido">
-            {getFieldDecorator(
-              'last_name',
-              {}
-            )(<Input placeholder="Ingresa el apellido completo" />)}
-          </FormItem>
-        </Col>
-
-        <Col sm={24} md={8}>
-          <FormItem label="Email">
-            {getFieldDecorator(
-              'email',
-              {}
-            )(<Input placeholder="Ingresa el email" />)}
-          </FormItem>
-        </Col>
-        <Col sm={24} md={8}>
-          <FormItem label="Fecha de registro">
-            {getFieldDecorator(
-              'date_joined',
-              {}
-            )(<DatePicker format="DD-MM-YYYY" />)}
-          </FormItem>
-        </Col>
-        <Col sm={24} md={8}>
-          <FormItem label="Fecha">
-            {getFieldDecorator(
-              'date_joined_range',
-              {}
-            )(<RangePicker format="YYYY-MM-DD" />)}
-          </FormItem>
-        </Col>
-      </Row>
+    <Form
+      form={form}
+      onFinish={onSubmit}
+      layout="inline"
+      className="card-block"
+    >
+      <Form.Item label="Nombre" name="first_name">
+        <Input placeholder="Ingresa el nombre completo" />
+      </Form.Item>
+      <Form.Item label="Apellido" name="last_name">
+        <Input placeholder="Ingresa el apellido completo" />
+      </Form.Item>
+      <Form.Item label="Email" name="email">
+        <Input placeholder="Ingresa el email" />
+      </Form.Item>
+      <Form.Item label="Fecha de registro" name="date_joined">
+        <DatePicker format="DD-MM-YYYY" />
+      </Form.Item>
+      <Form.Item label="Fecha" name="date_joined_range">
+        <RangePicker format="YYYY-MM-DD" />
+      </Form.Item>
       <div className="drawer-footer">
         <Button
           type="secondary"
@@ -110,4 +60,4 @@ const FilterForm = ({
   );
 };
 
-export default Form.create()(FilterForm);
+export default FilterForm;

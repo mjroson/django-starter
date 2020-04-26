@@ -2,12 +2,17 @@ import {
   Button,
   Col,
   Drawer,
-  Icon,
   PageHeader,
   Popconfirm,
   Row,
   message
 } from 'antd';
+import {
+  DeleteOutlined,
+  FormOutlined,
+  CheckCircleTwoTone,
+  MinusCircleOutlined
+} from '@ant-design/icons';
 import AppliedFilters from 'components/AppliedFilters';
 import SearchForm from 'components/SearchForm';
 import ObjectsTable from 'components/Table';
@@ -156,17 +161,17 @@ const CRUDPage = ({ filters }) => {
         title={`¿Desea eliminar este ${ENTITY_NAME}?`}
         onConfirm={() => dispatch(userActions.destroy(value))}
       >
-        <Icon type="delete" />
+        <DeleteOutlined />
       </Popconfirm>
-      <Icon type="form" onClick={() => onUpdate(value)} />
+      <FormOutlined onClick={() => onUpdate(value)} />
     </span>
   );
 
   const ActiveIcon = ({ value }) =>
     value ? (
-      <Icon type="check-circle" theme="twoTone" twoToneColor="#52c41a" />
+      <CheckCircleTwoTone twoToneColor="#52c41a" />
     ) : (
-      <Icon type="minus-circle" theme="twoTone" twoToneColor="#ff4747" />
+      <MinusCircleOutlined twoToneColor="#ff4747" />
     );
 
   const columns = [
