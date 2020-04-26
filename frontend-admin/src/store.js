@@ -1,15 +1,13 @@
-import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import users from './containers/Users/reducers';
+import reducers from 'reducers';
 
 const store = createStore(
-  combineReducers({
-    users
-  }),
+  reducers,
   {},
-  composeWithDevTools(applyMiddleware(logger, thunk))
+  composeWithDevTools(compose(applyMiddleware(thunk, logger)))
 );
 
 export default store;

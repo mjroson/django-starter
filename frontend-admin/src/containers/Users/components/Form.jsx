@@ -1,13 +1,11 @@
 import React, { useEffect } from 'react';
 import { Form, Input, Button, Switch } from 'antd';
+import validateMessages from 'config/validateMessages';
 
-const FormItem = Form.Item;
-
-const ObjectForm = ({ currentObj, onClose, form, update, create }) => {
-  const { getFieldDecorator } = form;
+const ObjectForm = ({ currentObj, onClose, create, update, formErrors }) => {
+  const [form] = Form.useForm();
 
   useEffect(() => {
-    console.log('Use efect object form ', currentObj);
     if (currentObj != null) {
       form.setFieldsValue({ ...currentObj });
     } else {
@@ -15,57 +13,72 @@ const ObjectForm = ({ currentObj, onClose, form, update, create }) => {
     }
   }, [currentObj]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const handleSubmit = e => {
-    e.preventDefault();
-    form.validateFields((err, values) => {
-      if (!err) {
-        const obj = currentObj ? { ...currentObj } : Object();
-        Object.keys(values).forEach(key => {
-          obj[key] = values[key];
+  useEffect(() => {
+    /**
+     * Handler error from models.
+     */
+    if (formErrors) {
+      const errorsData = [];
+      const formValues = form.getFieldsValue();
+
+      Object.keys(formErrors).forEach(key => {
+        errorsData.push({
+          name: key,
+          errors: formErrors[key].map(errorMsg => errorMsg),
+          value: formValues[key]
         });
-        if (currentObj) {
-          update(obj);
-        } else {
-          create(obj);
-        }
-      }
-    });
+      });
+      form.setFields(errorsData);
+    }
+  }, [formErrors]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const onFinish = data => {
+    console.log('On finish ', data);
+    if (currentObj) {
+      update(data);
+    } else {
+      create(data);
+    }
   };
 
   return (
-    <Form onSubmit={handleSubmit} className="card-block">
-      <FormItem label="Email">
-        {getFieldDecorator('email', {
-          rules: [{ required: true, message: 'Este campo es requerido!' }]
-        })(<Input type="email" />)}
-      </FormItem>
-      <FormItem label="Nombre">
-        {getFieldDecorator('first_name', {
-          rules: [{ required: true, message: 'Este campo es requerido!' }]
-        })(<Input />)}
-      </FormItem>
-      <FormItem label="Apellido">
-        {getFieldDecorator('last_name', {
-          rules: [{ required: true, message: 'Este campo es requerido!' }]
-        })(<Input />)}
-      </FormItem>
-      <FormItem label="Nombre de usuario">
-        {getFieldDecorator('username', {
-          rules: [{ required: true, message: 'Este campo es requerido!' }]
-        })(<Input />)}
-      </FormItem>
+    <Form
+      form={form}
+      onFinish={onFinish}
+      layout="vertical"
+      className="card-block"
+      name="objectForm"
+      validateMessages={validateMessages}
+    >
+      <Form.Item label="Email" name="email" rules={[{ required: true }]}>
+        <Input type="email" />
+      </Form.Item>
 
-      <FormItem label="Activo">
-        {getFieldDecorator('is_active', { valuePropName: 'checked' })(
-          <Switch />
-        )}
-      </FormItem>
+      <Form.Item label="Nombre" name="first_name" rules={[{ required: true }]}>
+        <Input />
+      </Form.Item>
+
+      <Form.Item label="Apellido" name="last_name" rules={[{ required: true }]}>
+        <Input />
+      </Form.Item>
+
+      <Form.Item
+        label="Nombre de usuario"
+        name="username"
+        rules={[{ required: true }]}
+      >
+        <Input />
+      </Form.Item>
+
+      <Form.Item label="Activo" name="is_actived" valuePropName="checked">
+        <Switch />
+      </Form.Item>
 
       <div className="drawer-footer">
-        <Button onClick={onClose} style={{ marginRight: 8 }}>
+        <Button onClick={onClose} className="btn-forms-action">
           Cancelar
         </Button>
-        <Button htmlType="submit" type="primary">
+        <Button htmlType="submit" type="primary" className="btn-forms-action">
           {`${currentObj === null ? 'Crear' : 'Actualizar'}`}
         </Button>
       </div>
@@ -73,4 +86,4 @@ const ObjectForm = ({ currentObj, onClose, form, update, create }) => {
   );
 };
 
-export default Form.create()(ObjectForm);
+export default ObjectForm;

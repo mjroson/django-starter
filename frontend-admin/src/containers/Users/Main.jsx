@@ -2,12 +2,17 @@ import {
   Button,
   Col,
   Drawer,
-  Icon,
   PageHeader,
   Popconfirm,
   Row,
   message
 } from 'antd';
+import {
+  DeleteOutlined,
+  FormOutlined,
+  CheckCircleTwoTone,
+  MinusCircleOutlined
+} from '@ant-design/icons';
 import AppliedFilters from 'components/AppliedFilters';
 import SearchForm from 'components/SearchForm';
 import ObjectsTable from 'components/Table';
@@ -21,7 +26,9 @@ import {
 } from 'use-query-params';
 import { CustomDateParam } from 'utils/filter-params';
 import { displayDate } from 'utils/formats';
-import userModel from './actions';
+import { widhFilters } from 'utils/crud-hoc';
+
+import { userActions } from './data/models';
 import FormFilter from './components/Filter';
 import ObjectForm from './components/Form';
 import { ENTITY_NAME, ENTITY_PLURAL_NAME, PAGE_SIZE } from './constants';
@@ -29,53 +36,53 @@ import { ENTITY_NAME, ENTITY_PLURAL_NAME, PAGE_SIZE } from './constants';
 const FILTERS = {
   page: {
     label: 'Pagina',
-    type: NumberParam
+    type: NumberParam,
+    inForm: false
   },
   search: {
     label: 'Buscador',
-    type: StringParam
+    type: StringParam,
+    inForm: false
   },
   ordering: {
     label: 'Orden',
-    type: StringParam
+    type: StringParam,
+    inForm: false
   },
   first_name: {
     label: 'Nombre',
-    type: StringParam
+    type: StringParam,
+    inForm: true
   },
   last_name: {
     label: 'Apellido',
-    type: StringParam
+    type: StringParam,
+    inForm: true
   },
   date_joined: {
     label: 'Fecha de registro',
-    type: CustomDateParam
+    type: CustomDateParam,
+    inForm: true
   },
   date_joined_range: {
     label: 'Rango de recha de registro',
-    type: ArrayParam
+    type: ArrayParam,
+    inForm: true
   },
   id: {
     label: 'ID',
-    type: NumberParam
+    type: NumberParam,
+    inForm: false
   }
 };
 
-const filterTypeToObject = () => {
-  let obj = {};
-  for (const key in FILTERS) {
-    obj[key] = FILTERS[key].type;
-  }
-  return obj;
-};
-
-const CRUDPage = props => {
+const CRUDPage = ({ filters }) => {
   const dispatch = useDispatch();
   const [currentObj, setCurrentObj] = useState(null);
   const [visibleFilter, setVisibleFilter] = useState(false);
   const [visibleForm, setVisibleForm] = useState(false);
 
-  const objects = useSelector(state => state.users.listData);
+  const objects = useSelector(state => state.users?.listData);
 
   const reqCreateSuccess = useSelector(
     state => state.users.reqStatus.create === 'loaded'
@@ -83,34 +90,43 @@ const CRUDPage = props => {
   const reqUpdateSuccess = useSelector(
     state => state.users.reqStatus.update === 'loaded'
   );
+
+  const formErrors = useSelector(state => {
+    return state.users.errors.create || state.users.errors.update;
+  });
   const reqListLoading = useSelector(
     state => state.users.reqStatus.list !== 'loaded'
   );
 
-  const [query, setQuery] = useQueryParams(filterTypeToObject());
+  const [query, setQuery] = useQueryParams(filters);
 
   useEffect(() => {
     // Example to dispatch list action and use success and error callBack functions (those are optionals)
-    dispatch(
-      userModel.list(
-        query,
-        data => {
-          console.log('Success callback user list ', data);
-        },
-        error => {
-          console.log(error);
-          message.error(
-            `Hubo un error al intentar recuperar el listado de ${ENTITY_PLURAL_NAME}`
-          );
-        }
-      )
-    );
-  }, [query, dispatch]);
+    if (userActions) {
+      dispatch(
+        userActions.list(
+          query,
+          data => {
+            console.log('Success callback user list ', data);
+          },
+          error => {
+            if (error.status !== 401) {
+              message.error(
+                `Hubo un error al intentar recuperar el listado de ${ENTITY_PLURAL_NAME}`
+              );
+            }
+          }
+        )
+      );
+    }
+  }, [query, userActions]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    setCurrentObj(undefined);
-    setVisibleForm(false);
-  }, [reqCreateSuccess, reqUpdateSuccess]);
+    if (!formErrors) {
+      setCurrentObj(undefined);
+      setVisibleForm(false);
+    }
+  }, [formErrors, reqCreateSuccess, reqUpdateSuccess]);
 
   const onChangeParams = params => {
     setQuery({ ...params, page: 1 });
@@ -143,19 +159,19 @@ const CRUDPage = props => {
     <span className="table-column-actions">
       <Popconfirm
         title={`¿Desea eliminar este ${ENTITY_NAME}?`}
-        onConfirm={() => dispatch(userModel.destroy(value))}
+        onConfirm={() => dispatch(userActions.destroy(value))}
       >
-        <Icon type="delete" />
+        <DeleteOutlined />
       </Popconfirm>
-      <Icon type="form" onClick={() => onUpdate(value)} />
+      <FormOutlined onClick={() => onUpdate(value)} />
     </span>
   );
 
   const ActiveIcon = ({ value }) =>
     value ? (
-      <Icon type="check-circle" theme="twoTone" twoToneColor="#52c41a" />
+      <CheckCircleTwoTone twoToneColor="#52c41a" />
     ) : (
-      <Icon type="minus-circle" theme="twoTone" twoToneColor="#ff4747" />
+      <MinusCircleOutlined twoToneColor="#ff4747" />
     );
 
   const columns = [
@@ -184,22 +200,22 @@ const CRUDPage = props => {
     {
       title: 'Activo',
       dataIndex: 'is_active',
-      render: value => <ActiveIcon value={value} />
+      render: value => ActiveIcon({ value })
     },
     {
       title: 'Acciones',
       key: 'operation',
-      render: obj => <OptionsTable value={obj} />
+      render: obj => OptionsTable({ value: obj })
     }
   ];
 
   return (
-    <>
+    <div className="generic-crud-section">
       <Drawer
         title={
           currentObj === null ? `Crear ${ENTITY_NAME}` : `Editar ${ENTITY_NAME}`
         }
-        width={720}
+        className="ant-drawer-horizontal"
         visible={visibleForm}
         onClose={() => setVisibleForm(false)}
         style={{
@@ -210,8 +226,9 @@ const CRUDPage = props => {
         <ObjectForm
           currentObj={currentObj}
           onClose={() => setVisibleForm(false)}
-          create={data => dispatch(userModel.create(data))}
-          update={data => dispatch(userModel.update(data))}
+          formErrors={formErrors}
+          create={data => dispatch(userActions.create(data))}
+          update={data => dispatch(userActions.update(data))}
         />
       </Drawer>
 
@@ -219,45 +236,57 @@ const CRUDPage = props => {
         title="Filtros"
         placement="top"
         closable={false}
+        className="ant-drawer-vertical"
         onClose={() => setVisibleFilter(false)}
         visible={visibleFilter}
       >
         <FormFilter
           onSubmit={applyFilter}
           onCancel={() => setVisibleFilter(false)}
-          filters={query}
+          filtersData={FILTERS}
+          appliedFilters={query}
         />
       </Drawer>
       <PageHeader
         title={ENTITY_PLURAL_NAME}
         onBack={() => window.history.back()}
         subTitle="listado de usuarios registrados"
+        className="page-header"
         extra={[
           <Button
             type="primary"
             onClick={() => onCreate()}
+            className="btn-actions"
             key="new_user"
-            style={{ float: 'right', marginLeft: '5px' }}
           >
             Nuevo {ENTITY_NAME}
           </Button>
         ]}
       >
         <Row>
-          <Col span={12}>
+          <Col md={12} sm={24}>
             <SearchForm
               submit={search}
               searchValue={query.search || ''}
               placeholder="Ingrese email, nombre o apellido"
             />
           </Col>
-          <Col span={12} className="container-general-actions-right">
-            <Button onClick={() => setVisibleFilter(true)}>Filtros</Button>
-          </Col>
         </Row>
-        <Row>
-          <Col span={24} className="container-applied-filters">
-            <AppliedFilters filters={query} removeFilter={removeFilter} />
+        <Row className="form-filters">
+          <Col md={22} sm={24} className="container-applied-filters">
+            <AppliedFilters
+              filters={query}
+              removeFilter={removeFilter}
+              configFilters={FILTERS}
+            />
+          </Col>
+          <Col md={2} sm={24}>
+            <Button
+              onClick={() => setVisibleFilter(true)}
+              className="btn-open-filters-form"
+            >
+              Filtros
+            </Button>
           </Col>
         </Row>
 
@@ -282,8 +311,8 @@ const CRUDPage = props => {
           tableLayout="auto"
         />
       </PageHeader>
-    </>
+    </div>
   );
 };
 
-export default CRUDPage;
+export default widhFilters(CRUDPage, FILTERS);

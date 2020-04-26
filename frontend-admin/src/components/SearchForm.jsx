@@ -1,39 +1,19 @@
-import React, { useEffect } from 'react';
-import { Form, Icon, Input, Button } from 'antd';
+import React from 'react';
+import { Input } from 'antd';
 
-const SearchForm = ({ form, searchValue = '', submit, placeholder = '' }) => {
-  const { getFieldDecorator } = form;
+const { Search } = Input;
 
-  useEffect(() => {
-    form.setFieldsValue({ search: searchValue });
-  }, [searchValue]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const handleSubmit = e => {
-    e.preventDefault();
-    form.validateFields((err, values) => {
-      submit(values.search);
-    });
-  };
-
+const SearchForm = ({ searchValue = '', submit, placeholder = '' }) => {
   return (
-    <Form layout="inline" onSubmit={handleSubmit}>
-      <Form.Item>
-        {getFieldDecorator('search', {
-          initialValue: searchValue
-        })(
-          <Input
-            prefix={<Icon type="search" style={{ color: 'rgba(0,0,0,.25)' }} />}
-            placeholder={placeholder}
-          />
-        )}
-      </Form.Item>
-      <Form.Item>
-        <Button type="primary" htmlType="submit">
-          Buscar
-        </Button>
-      </Form.Item>
-    </Form>
+    <Search
+      placeholder={placeholder}
+      className="search-input"
+      defaultValue={searchValue}
+      onSearch={value => submit(value)}
+      style={{ width: '80%' }}
+      enterButton
+    />
   );
 };
 
-export default Form.create({ name: 'search' })(SearchForm);
+export default SearchForm;

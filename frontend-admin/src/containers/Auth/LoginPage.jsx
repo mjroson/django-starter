@@ -2,14 +2,18 @@ import React from 'react';
 import { Form, Icon, Input, Button, Checkbox, Card, message } from 'antd';
 import axios from 'axios';
 
-const LoginPage = props => {
-  const { form, history } = props;
-  const { getFieldDecorator } = form;
+const LoginPage = ({ history }) => {
+  const [form] = Form.useForm();
 
   const redirect = () => {
     const query = new URLSearchParams(window.location.search);
     const next = query.get('next');
-    if (next && next !== null && next !== '') {
+    if (
+      next &&
+      next !== null &&
+      next !== '' &&
+      window.location.pathname !== next
+    ) {
       history.push(next);
     } else {
       history.push('/');
@@ -53,41 +57,29 @@ const LoginPage = props => {
       }}
     >
       <Card title="Iniciar sesion" style={{ maxWidth: 400, margin: 'auto' }}>
-        <Form onSubmit={handleSubmit} className="login-form">
-          <Form.Item>
-            {getFieldDecorator('username', {
-              rules: [
-                { required: true, message: 'Please input your username!' }
-              ]
-            })(
-              <Input
-                prefix={
-                  <Icon type="email" style={{ color: 'rgba(0,0,0,.25)' }} />
-                }
-                placeholder="Nombre de usuario"
-              />
-            )}
+        <Form
+          onFinish={handleSubmit}
+          form={form}
+          className="login-form"
+          name="loginForm"
+        >
+          <Form.Item name="username">
+            <Input
+              prefix={
+                <Icon type="email" style={{ color: 'rgba(0,0,0,.25)' }} />
+              }
+              placeholder="Nombre de usuario"
+            />
           </Form.Item>
-          <Form.Item>
-            {getFieldDecorator('password', {
-              rules: [
-                { required: true, message: 'Please input your Password!' }
-              ]
-            })(
-              <Input
-                prefix={
-                  <Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />
-                }
-                type="password"
-                placeholder="Password"
-              />
-            )}
+          <Form.Item name="password">
+            <Input
+              prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
+              type="password"
+              placeholder="Password"
+            />
           </Form.Item>
-          <Form.Item>
-            {getFieldDecorator('remember', {
-              valuePropName: 'checked',
-              initialValue: true
-            })(<Checkbox>Recordarme</Checkbox>)}
+          <Form.Item name="remember">
+            <Checkbox>Recordarme</Checkbox>
             <Button
               type="primary"
               htmlType="submit"
@@ -102,4 +94,4 @@ const LoginPage = props => {
   );
 };
 
-export default Form.create({ name: 'login' })(LoginPage);
+export default LoginPage;

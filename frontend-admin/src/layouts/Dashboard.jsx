@@ -1,7 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { Layout, Menu, Icon, Dropdown, Button } from 'antd';
+import React, { useState } from 'react';
+import { Layout, Menu, Dropdown, Button } from 'antd';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import Logo from 'components/icons/logo';
+import {
+  ProfileOutlined,
+  LogoutOutlined,
+  UserOutlined
+} from '@ant-design/icons';
+import Logo from 'components/icons/Logo';
 import dashboardRoutes from 'routes/dashboard';
 import './index.less';
 
@@ -30,8 +35,8 @@ const sidebarMenu = (routes, parentKey) =>
             key={key}
             title={
               <span>
-                {item.icon && <Icon type={item.icon} />}
-                <span>{item.sidebarName}</span>
+                {item.Icon ? <item.Icon /> : null}
+                <span className="nav-text">{item.sidebarName}</span>
               </span>
             }
           >
@@ -41,8 +46,8 @@ const sidebarMenu = (routes, parentKey) =>
       }
       return (
         <Menu.Item key={key} path={item.path}>
-          {item.icon && <Icon type={item.icon} />}
-          <span>{item.sidebarName}</span>
+          {item.Icon ? <item.Icon /> : null}
+          <span className="nav-text">{item.sidebarName}</span>
         </Menu.Item>
       );
     }
@@ -66,12 +71,12 @@ const Dashboard = ({ history }) => {
   const menu = (
     <Menu>
       <Menu.Item key="1">
-        <Icon type="user" size="large" />
+        <ProfileOutlined size="large" />
         Profile
       </Menu.Item>
       <Menu.Divider />
       <Menu.Item key="3" onClick={onLogout}>
-        <Icon type="logout" size="large" />
+        <LogoutOutlined size="large" />
         Logout
       </Menu.Item>
     </Menu>
@@ -81,24 +86,18 @@ const Dashboard = ({ history }) => {
     history.push(item.item.props.path);
   };
 
-  useEffect(() => {
-    if (!window.localStorage.getItem('token')) {
-      history.replace('/login');
-    }
-  }, []);
-
   return (
     <Layout>
       <Sider
         breakpoint="lg"
+        collapsedWidth={window.innerWidth > 700 ? undefined : '0'}
+        collapsible
         onBreakpoint={broken => {
           console.log(broken);
         }}
         onCollapse={(collapsed, type) => {
           setSiderCollapsed(collapsed);
         }}
-        collapsible
-        collapsedWidth={window.innerWidth > 700 ? undefined : '0'}
       >
         <div id="logo">
           <Logo style={siderCollapsed ? { width: '95%' } : {}} />
@@ -113,14 +112,19 @@ const Dashboard = ({ history }) => {
         </Menu>
       </Sider>
       <Layout>
-        <Header>
+        <Header className="site-layout-sub-header-background">
           <div id="right-menu">
             <Dropdown overlay={menu} trigger={['click']}>
-              <Button type="primary" shape="circle" icon="user" size="large" />
+              <Button
+                type="primary"
+                shape="circle"
+                icon={<UserOutlined />}
+                size="large"
+              />
             </Dropdown>
           </div>
         </Header>
-        <Content>
+        <Content style={{ margin: '24px 16px 0' }}>
           <Switch>{switchRoutes(dashboardRoutes)}</Switch>
         </Content>
         <Footer style={{ textAlign: 'center' }}>Boilerplate ©2020</Footer>

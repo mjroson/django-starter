@@ -97,8 +97,10 @@ Componentes
 https://ant.design/components/
 
 Redux ToolKit
-
 https://redux-toolkit.js.org/introduction/quick-start
+
+Redux Tools to develepment
+https://github.com/zalmoxisus/redux-devtools-extension
 
 ### Structure to create a CRUD from API Rest
 

@@ -56,7 +56,7 @@ const ObjectsTable = props => {
         return column;
       })
     );
-  }, [columns]);
+  }, [columns]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Table
