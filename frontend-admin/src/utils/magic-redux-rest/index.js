@@ -2,7 +2,7 @@ import { createReducer } from '@reduxjs/toolkit';
 import generateReducer from './genericReducers';
 import generateactions from './genericActions';
 
-const genericInitialState = {
+const initialState = {
   listData: {
     count: 0,
     results: []
@@ -12,24 +12,19 @@ const genericInitialState = {
   reqStatus: {}
 };
 
-const APIRestMaker = (function(my) {
-  my.reducer = (
-    initialState = genericInitialState,
-    reducerCustomManager = {}
-  ) =>
-    createReducer(initialState, {
-      ...generateReducer(my.config.entityName),
-      ...reducerCustomManager
+class ModelReduxRest {
+  constructor(config, state = initialState, reducerManager = {}, actions = {}) {
+    this.config = config;
+    this.actions = generateactions(config.entityName, config.ApiUrl, actions);
+
+    this.reducer = this.initializeReducer(state, reducerManager);
+  }
+
+  initializeReducer = (state, reducerManager) =>
+    createReducer(state, {
+      ...generateReducer(this.config.entityName),
+      ...reducerManager
     });
+}
 
-  my.make = params => {
-    my.config = {
-      ...params
-    };
-    my.actions = generateactions(my.config.entityName, my.config.ApiUrl);
-  };
-
-  return my;
-})(module);
-
-export default APIRestMaker;
+export default ModelReduxRest;

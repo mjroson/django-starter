@@ -1,13 +1,25 @@
 import axios from 'axios';
 
-const generateactions = (entityName, APIUrl) => ({
-  list: (params, onSuccess, onError, apiEndpoint = APIUrl) => {
-    return (dispatch, getState) => {
+const generateactions = (entityName, APIUrl, newActions) => {
+  function requesting(reqName) {
+    return {
+      type: `${entityName}/REQUESTING`,
+      reqName
+    };
+  }
+
+  function requestError(reqName, errors) {
+    return {
+      type: `${entityName}/REQUEST-ERROR`,
+      reqName,
+      errors
+    };
+  }
+
+  function list(params, onSuccess, onError, apiEndpoint = APIUrl) {
+    return dispatch => {
       const reqName = 'list';
-      dispatch({
-        type: `${entityName}/REQUESTING`,
-        reqName
-      });
+      dispatch(requesting(reqName));
       axios
         .get(apiEndpoint, { params })
         .then(resp => {
@@ -21,28 +33,24 @@ const generateactions = (entityName, APIUrl) => ({
           }
         })
         .catch(e => {
-          dispatch({
-            type: `${entityName}/REQUEST-ERROR`,
-            reqName,
-            errors: e.response ? e.response.data : null
-          });
+          const errors = e.response?.data;
+          dispatch(requestError(reqName, errors));
+
           if (typeof onError === 'function') {
             onError({
-              data: e.response ? e.response.data : null,
-              status: e.response?.status ?? undefined
+              errors,
+              reqStatus: e.response?.status ?? undefined
             });
           }
         });
     };
-  },
-  create: (data, onSuccess, onError, params = null, apiEndpoint = APIUrl) => {
+  }
+
+  function create(data, onSuccess, onError, apiEndpoint = APIUrl) {
     return dispatch => {
       const reqName = 'create';
-      dispatch({
-        type: `${entityName}/REQUESTING`,
-        reqName
-      });
-      return axios
+      dispatch(requesting(reqName));
+      axios
         .post(`${apiEndpoint}`, data)
         .then(resp => {
           dispatch({
@@ -55,25 +63,24 @@ const generateactions = (entityName, APIUrl) => ({
           }
         })
         .catch(e => {
-          dispatch({
-            type: `${entityName}/REQUEST-ERROR`,
-            reqName,
-            errors: e.response.data
-          });
+          const errors = e.response?.data;
+          dispatch(requestError(reqName, errors));
+
           if (typeof onError === 'function') {
-            onError(e.response ? e.response.data : null);
+            onError({
+              errors,
+              reqStatus: e.response?.status ?? undefined
+            });
           }
         });
     };
-  },
-  update: (data, onSuccess, onError, params = null, apiEndpoint = APIUrl) => {
+  }
+
+  function update(data, onSuccess, onError, apiEndpoint = APIUrl) {
     return dispatch => {
       const reqName = 'update';
-      dispatch({
-        type: `${entityName}/REQUESTING`,
-        reqName
-      });
-      return axios
+      dispatch(requesting(reqName));
+      axios
         .put(`${apiEndpoint}${data.id}/`, data)
         .then(resp => {
           dispatch({
@@ -86,24 +93,23 @@ const generateactions = (entityName, APIUrl) => ({
           }
         })
         .catch(e => {
-          dispatch({
-            type: `${entityName}/REQUEST-ERROR`,
-            reqName,
-            errors: e.response ? e.response.data : null
-          });
+          const errors = e.response?.data;
+          dispatch(requestError(reqName, errors));
+
           if (typeof onError === 'function') {
-            onError(e.response ? e.response.data : null);
+            onError({
+              errors,
+              reqStatus: e.response?.status ?? undefined
+            });
           }
         });
     };
-  },
-  destroy: (data, onSuccess, onError, params = null, apiEndpoint = APIUrl) => {
+  }
+
+  function destroy(data, onSuccess, onError, apiEndpoint = APIUrl) {
     return dispatch => {
       const reqName = 'destroy';
-      dispatch({
-        type: `${entityName}/REQUESTING`,
-        reqName
-      });
+      dispatch(requesting(reqName));
       axios
         .delete(`${apiEndpoint}${data.id}/`)
         .then(resp => {
@@ -117,17 +123,20 @@ const generateactions = (entityName, APIUrl) => ({
           }
         })
         .catch(e => {
-          dispatch({
-            type: `${entityName}/REQUEST-ERROR`,
-            reqName,
-            errors: e.response.data
-          });
+          const errors = e.response?.data;
+          dispatch(requestError(reqName, errors));
+
           if (typeof onError === 'function') {
-            onError(e.response ? e.response.data : null);
+            onError({
+              errors,
+              reqStatus: e.response?.status ?? undefined
+            });
           }
         });
     };
   }
-});
+
+  return { list, create, update, destroy, ...newActions };
+};
 
 export default generateactions;

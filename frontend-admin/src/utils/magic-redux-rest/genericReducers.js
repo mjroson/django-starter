@@ -5,10 +5,6 @@ const generateReducer = entityName => ({
     reqStatus: {
       ...state.reqStatus,
       [action.reqName]: 'loading'
-    },
-    errors: {
-      ...state.errors,
-      [action.reqName]: null
     }
   }),
 
@@ -44,9 +40,11 @@ const generateReducer = entityName => ({
   // Receive a new object
   [`${entityName}/CREATE`]: (state, action) => ({
     ...state,
-    count: state.count + 1,
-    results: [...state.results.push(action.data)],
-    loading: false,
+    listData: {
+      ...state.listData,
+      count: state.listData.count + 1,
+      results: [...state.listData.results, { ...action.data }]
+    },
     reqStatus: {
       ...state.reqStatus,
       [action.reqName]: 'loaded'
@@ -60,10 +58,12 @@ const generateReducer = entityName => ({
   // Receive a updated object
   [`${entityName}/UPDATE`]: (state, action) => ({
     ...state,
-    results: state.results.map(elem =>
-      elem.id === action.data.id ? action.data : elem
-    ),
-    loading: false,
+    listData: {
+      ...state.listData,
+      results: state.listData.results.map(elem =>
+        elem.id === action.data.id ? action.data : elem
+      )
+    },
     reqStatus: {
       ...state.reqStatus,
       [action.reqName]: 'loaded'
@@ -77,14 +77,13 @@ const generateReducer = entityName => ({
   // Receive a deleted object
   [`${entityName}/DESTROY`]: (state, action) => ({
     ...state,
-    count: state.count - 1,
-    loading: false,
-    results: [
-      ...state.results.splice(
-        state.results.findIndex(elem => elem.id === action.data.id),
-        0
-      )
-    ],
+    listData: {
+      ...state.listData,
+      results: state.listData.results.filter(
+        item => item.id !== action.data.id
+      ),
+      count: state.listData.count - 1
+    },
     reqStatus: {
       ...state.reqStatus,
       [action.reqName]: 'loaded'
