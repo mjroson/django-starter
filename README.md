@@ -68,5 +68,4 @@ https://github.com/celery/django-celery-beat
 
 ### Frontend
 
-Package React to manager url queryparams
-https://github.com/pbeshai/react-url-query
+The project is in other repository https://github.com/mjroson/frontend-admin-start
