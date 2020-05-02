@@ -3,22 +3,20 @@ FROM python:3.7
 ARG EXTRA_PACKAGES
 ARG ENVIRONMENT
 
-MAINTAINER matiroson@gmail.com
-
 ENV PYTHONUNBUFFERED 1
 
 RUN apt-get update -y \
     && apt-get -y install binutils $EXTRA_PACKAGES \
     && rm -rf /var/lib/apt/lists/*
 
-RUN mkdir -p /usr/src/app && cd /usr/src/app
+RUN mkdir -p /app && cd /app
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
-COPY . /usr/src/app
+COPY . /app
 
-RUN pip install -r /usr/src/app/requirements/$ENVIRONMENT.txt --no-cache-dir
+RUN pip install -r /app/requirements/$ENVIRONMENT.txt --no-cache-dir
 
-RUN chmod 777 /usr/src/app/run.sh
+RUN chmod 777 /app/run.sh
 
-CMD ['/usr/src/app/run.sh']
+CMD ["/app/run.sh"]
