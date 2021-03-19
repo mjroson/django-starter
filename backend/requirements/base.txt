@@ -6,6 +6,6 @@ django-celery-beat
 django-cors-headers==3.2.1
 django-extensions==2.2.5
 django-filter===2.2.0
-djangorestframework==3.11.0
+djangorestframework==3.11.2
 djangorestframework-simplejwt==4.4.0
 psycopg2==2.8.4
