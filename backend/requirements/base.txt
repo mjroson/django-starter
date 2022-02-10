@@ -1,6 +1,6 @@
 amqp==2.5.2
 celery==4.4.0
-Django==2.2.13
+Django==2.2.27
 django-celery-results
 django-celery-beat 
 django-cors-headers==3.2.1
