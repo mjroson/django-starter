@@ -14,12 +14,9 @@ tests/coverage_html/
 tests/.coverage
 tests/report/
 .directory
-*.log
-**/.sass-cache/
 **/CACHE/
 **/media
 
-frontend-admin/
 .vscode/
 
 **/migrations/00*
@@ -34,31 +31,7 @@ celerybeat-schedule
 
 media/*
 
-# dependencies
-/node_modules
-
 # testing
 /coverage
 
-# production
-/build
-
 .env
-
-# misc
-.DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-
-nginx/cerbot
-
-assets/*
-
-webpack-stats.dev.json

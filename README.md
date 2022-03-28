@@ -4,13 +4,12 @@
 
 ### Local deploy:
 
-1. Copy docker-compose.local.yml to docker-compose.override.yml
-
-   `cp docker-compose.local.yml docker-compose.overide.yml`
-
-2. Copy the environment file
+1. Copy the environment file
 
    `cp local.env .env`
+
+2. Define project name. 
+   On .env file define PROJ_NAME.
 
 3. Up project
 
@@ -51,10 +50,6 @@ More info: https://django-extensions.readthedocs.io/en/latest/runserver_plus.htm
 
 ## Utils resources
 
-### Infra
-
-Use image cerbot to automatic renovation lentscrypt ssl certificate (https://github.com/wmnnd/nginx-certbot) based to https://medium.com/@pentacent/nginx-and-lets-encrypt-with-docker-in-less-than-5-minutes-b4b8a60d3a71
-
 ### Backend
 
 Django extensions ( custom management extensions for the Django Framework )
@@ -90,3 +85,10 @@ https://github.com/celery/django-celery-beat
 ### Frontend
 
 The project is in other repository https://github.com/mjroson/frontend-admin-start
+
+
+### Infra
+
+Deploy on server: 
+
+Use image cerbot to automatic renovation lentscrypt ssl certificate (https://github.com/wmnnd/nginx-certbot) based to https://medium.com/@pentacent/nginx-and-lets-encrypt-with-docker-in-less-than-5-minutes-b4b8a60d3a71

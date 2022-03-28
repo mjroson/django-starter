@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if [ "$ENVIRONMENT" = "local" ]; then
+if [ "$ENVIRONMENT" = "dev" ]; then
 	echo "[run] make migrations"
 	python3 manage.py makemigrations || exit 1
 fi
@@ -8,7 +8,7 @@ fi
 echo "[run] Migrate DB"
 python3 manage.py migrate || exit 1
 
-if [ "$ENVIRONMENT" != "local" ]; then
+if [ "$ENVIRONMENT" != "dev" ]; then
 	echo "[run] Collect static files ${ENVIRONMENT}"
 	python3 manage.py collectstatic --noinput
 	chmod -R 777 ./static
@@ -25,16 +25,16 @@ if not User.objects.filter(is_superuser=True).exists():
    user.is_superuser = True
    user.is_staff = True
    user.set_password('qwerty123')
-   user.email = 'matiroson@gmail.com'
+   user.email = '${ADMIN_EMAIL}'
    user.username = 'admin'
    user.save()
 " | python3 manage.py shell || exit 1
 
 
-[ "$ENVIRONMENT" = local ] &&
+[ "$ENVIRONMENT" = dev ] &&
 	python3 manage.py runserver 0.0.0.0:8000
 
-[ "$ENVIRONMENT" != local ] &&
+[ "$ENVIRONMENT" != dev ] &&
 	gunicorn config.wsgi:application --bind 0.0.0.0:8000 --log-level=info --timeout=500
 
 

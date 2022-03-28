@@ -1,8 +1,18 @@
 version: "3.7"
+
+volumes:
+  database:
+  rabbitmq:
+
+networks:
+  backend:
+  database:
+  broker:
+
 services:
   # Postgresql database
   db:
-    image: postgres:latest
+    image: postgres:14.2-bullseye
     container_name: ${PROJ_NAME}_db
     env_file: .env
     environment:
@@ -27,19 +37,42 @@ services:
       restart_policy:
         condition: on-failure
     networks:
-      - task_queque
+      - broker
     volumes:
       - rabbitmq:/var/lib/rabbitmq
 
+  # Generate service base to reautilizable for celery, django and flower service.
   backend_base: &backendbase
     env_file: .env
     build:
-      context: ./backend
+      context: .
       args:
         ENVIRONMENT: ${ENVIRONMENT}
+        EXTRA_PACKAGES: graphviz graphviz-dev
+    command: bash -c "sleep 10 && echo 'bye'"
     image: ${PROJ_NAME}_backend:${IMG_VERSION}
     volumes:
-      - ./backend:/usr/src/app
+      - .:/app
+
+  # Django backend
+  django:
+    <<: *backendbase
+    image: ${PROJ_NAME}_backend:${IMG_VERSION}
+    container_name: ${PROJ_NAME}_backend_${IMG_VERSION}
+    command: bash -c "sleep 5 && sh run.sh"
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    depends_on:
+      - db
+    ports:
+      - "8000:8000"
+    networks:
+      - backend
+      - broker
+      - database
+      - default
 
   # Celery worker
   worker:
@@ -62,31 +95,17 @@ services:
     environment:
       - C_FORCE_ROOT=true
     networks:
-      - task_queque
+      - broker
       - database
 
-  # Django backend
-  backend:
+  # Celery monitor
+  flower:
     <<: *backendbase
-    image: ${PROJ_NAME}_backend:${IMG_VERSION}
-    container_name: ${PROJ_NAME}_backend_${IMG_VERSION}
-    command: bash -c "sleep 5 && sh run.sh"
-    deploy:
-      replicas: 1
-      restart_policy:
-        condition: on-failure
+    command: bash -c "sleep 10 && celery -A config flower"
     depends_on:
-      - db
+      - rabbitmq
+    ports:
+      - "5555:5555"
     networks:
-      - backend
-      - task_queque
-      - database
-
-volumes:
-  database:
-  rabbitmq:
-
-networks:
-  backend:
-  database:
-  task_queque:
+      - broker
+      - default

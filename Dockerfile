@@ -1,4 +1,4 @@
-FROM python:3.7
+FROM python:3.9.11-buster
 
 ARG EXTRA_PACKAGES
 ARG ENVIRONMENT
@@ -19,4 +19,4 @@ RUN pip install -r /app/requirements/$ENVIRONMENT.txt --no-cache-dir
 
 RUN chmod 777 /app/run.sh
 
-CMD ["/app/run.sh"]
+CMD ["sh", "run.sh"]

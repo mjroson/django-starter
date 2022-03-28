@@ -1,0 +1,13 @@
+amqp
+celery
+Django
+django-celery-results
+django-celery-beat 
+django-cors-headers
+django-extensions
+django-environ
+django-filter
+djangorestframework
+djangorestframework-simplejwt
+psycopg2
+flower

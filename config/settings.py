@@ -1,10 +1,30 @@
+"""
+Django settings.
+
+For more information on this file, see
+https://docs.djangoproject.com/en/3.2/topics/settings/
+
+For the full list of settings and their values, see
+https://docs.djangoproject.com/en/3.2/ref/settings/
+"""
+
 from datetime import timedelta
+import sys
 import os
-from apps.core.utils import get_value_env as env
+from pathlib import Path
+import environ
 import warnings
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+env = environ.Env()
+
+
+ENVIRONMENT = env("ENVIRONMENT")
+
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Add apps to sys.path
+sys.path.insert(0, BASE_DIR.joinpath("apps"))
 
 
 if not env('SECRET_KEY'):
@@ -16,23 +36,17 @@ else:
     SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env("DJANGO_DEBUG", True)
+DEBUG = env.bool("DJANGO_DEBUG")
 
 ALLOWED_HOSTS = ['*']
 
 
-#############################################
+###############################################################################
 #  Application definition
-#############################################
+###############################################################################
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-
+    # Thirds apps
     'django_celery_results',
     'django_celery_beat',
 
@@ -41,14 +55,23 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_filters',
     'corsheaders',
+
+    # My apps
     'apps.core',
-    # 'apps.auth',
-    # 'apps.user'
+    'apps.auth',
+    'apps.user',
+
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
 ]
 
-#############################################
+###############################################################################
 #  MIDDLEWARE
-#############################################
+###############################################################################
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -60,17 +83,20 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# if env("ENVIRONMENT", "local") == 'local':
+# if env("ENVIRONMENT", "dev") == 'dev':
 #    MIDDLEWARE.append('apps.core.middleware.dev_cors_middleware')
 
-#############################################
+###############################################################################
 #  TEMPLATES CONFIG
-#############################################
+###############################################################################
+
+APP_DIRS = True
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(BASE_DIR, "config/templates"),
+            BASE_DIR.joinpath("config/templates"),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -88,10 +114,12 @@ WSGI_APPLICATION = 'config.wsgi.application'
 ROOT_URLCONF = 'config.urls'
 
 
-#############################################
+###############################################################################
 # DATABASE CONFIG
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
-#############################################
+###############################################################################
+
+# DATABASES = {"default": env.db("DATABASE_URL")}
 DATABASES = {
     'default': {
         'ENGINE': env('DB_ENGINE'),
@@ -103,9 +131,9 @@ DATABASES = {
     }
 }
 
-#############################################
+###############################################################################
 #  AUTHENTICATION CONFIG
-#############################################
+###############################################################################
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
@@ -126,9 +154,9 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-#############################################
+###############################################################################
 # LOCALES & LANG
-#############################################
+###############################################################################
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
@@ -143,9 +171,10 @@ USE_L10N = True
 
 USE_TZ = True
 
-#############################################
+
+###############################################################################
 # STATIC FILES
-#############################################
+###############################################################################
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
@@ -156,9 +185,16 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
 
-###################################################################
+###############################################################################
+# Default primary key field type
+# https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
+###############################################################################
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+###############################################################################
 # CONFIG CELERY AND RABBITMQ
-###################################################################
+###############################################################################
 
 # More info : http://docs.celeryproject.org/en/master/userguide/configuration.html#broker-url
 BROKER_URL = "amqp://{user}:{password}@rabbitmq:5672//?heartbeat=30".format(
@@ -192,16 +228,29 @@ CELERY_TIMEZONE = TIME_ZONE
 CELERY_ENABLE_UTC = TIME_ZONE == 'UTC'
 
 
-###################################################################
+###############################################################################
 # CONFIG DEFAULTS DJANGO REST FRAMEWORK
 # https://www.django-rest-framework.org/api-guide/settings/
-###################################################################
+###############################################################################
+
+
+DEFAULT_RENDERER_CLASSES = [
+    "rest_framework.renderers.JSONRenderer",
+]
+
+if ENVIRONMENT != "prod":
+    DEFAULT_RENDERER_CLASSES += [
+        "rest_framework.renderers.BrowsableAPIRenderer",
+    ]
+
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        # "oauth2_provider.contrib.rest_framework.OAuth2Authentication",
         'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-    ),
+        'rest_framework.authentication.BasicAuthentication',
+    ],
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend',
         'rest_framework.filters.OrderingFilter',
@@ -210,23 +259,29 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
     ),
+    'DEFAULT_RENDERER_CLASSES': DEFAULT_RENDERER_CLASSES,
     'DEFAULT_PAGINATION_CLASS': 'apps.core.pagination.CustomPageNumberPagination',
     'PAGE_SIZE': 10
 }
 
+# if ENVIRONMENT == "dev":
+#     REST_FRAMEWORK["DEFAULT_AUTHENTICATION_CLASSES"] += [
+#         'rest_framework.authentication.BasicAuthentication',
+#     ]
 
-###################################################################
+
+###############################################################################
 # CONFIG CORS DOMAIN
 # https://github.com/adamchainz/django-cors-headers#configuration
-###################################################################
+###############################################################################
 
 CORS_ORIGIN_ALLOW_ALL = True
 
 
-###################################################################
+###############################################################################
 # CONFIG JSON WEB TOKEN
-# https://github.com/davesque/django-rest-framework-simplejwt#settings
-###################################################################
+# https://django-rest-framework-simplejwt.readthedocs.io/en/latest/settings.html
+###############################################################################
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
@@ -253,3 +308,11 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
+
+
+###############################################################################
+# A list of all the people who get code error notifications
+# https://docs.djangoproject.com/en/4.0/ref/settings/#admins
+###############################################################################
+
+ADMINS = [("Admin", env("ADMIN_EMAIL"))]
