@@ -5,17 +5,40 @@ ARG ENVIRONMENT
 
 ENV PYTHONUNBUFFERED 1
 
-RUN apt-get update -y \
-    && apt-get -y install binutils $EXTRA_PACKAGES \
-    && rm -rf /var/lib/apt/lists/*
-
-RUN mkdir -p /app && cd /app
+COPY requirements/*.txt /tmp/requirements/
 
 WORKDIR /app
 
-COPY . /app
+COPY run.sh /app/run.sh
 
-RUN pip install -r /app/requirements/$ENVIRONMENT.txt --no-cache-dir
+RUN set -x \
+    && buildDeps=" \
+    libffi-dev \
+    libpq-dev \
+    # gcc \
+    # python3-dev \
+    # binutils \
+    # musl-dev \
+    " \
+    && runDeps=" \
+    postgresql-client \
+    " \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends $buildDeps \
+    && apt-get install -y --no-install-recommends $runDeps \
+    && apt-get -y install binutils $EXTRA_PACKAGES \
+    && pip install -r /tmp/requirements/base.txt \
+    && if [ $ENVIRONMENT = dev ]; then \
+    # Install python dev dependencies
+    pip install -r /tmp/requirements/dev.txt; \
+    fi \
+    && apt-get remove -y $buildDeps \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY . .
+
+EXPOSE 8000
 
 RUN chmod 777 /app/run.sh
 
