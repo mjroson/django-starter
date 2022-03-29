@@ -1,5 +1,6 @@
 -r base.txt
+-r test.txt
 
-ipdb
-graphviz
-pygraphviz
+ipdb==0.13.9
+graphviz==0.19.1
+pygraphviz==1.9
