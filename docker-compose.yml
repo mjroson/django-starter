@@ -48,7 +48,7 @@ services:
       context: .
       args:
         ENVIRONMENT: ${ENVIRONMENT}
-        EXTRA_PACKAGES: graphviz graphviz-dev
+        # EXTRA_PACKAGES: graphviz graphviz-dev
     command: bash -c "sleep 10 && echo 'bye'"
     image: ${PROJ_NAME}_backend:${IMG_VERSION}
     volumes:
@@ -57,7 +57,6 @@ services:
   # Django backend
   django:
     <<: *backendbase
-    image: ${PROJ_NAME}_backend:${IMG_VERSION}
     container_name: ${PROJ_NAME}_backend_${IMG_VERSION}
     command: bash -c "sleep 5 && sh run.sh"
     deploy:
@@ -77,7 +76,6 @@ services:
   # Celery worker
   worker:
     <<: *backendbase
-    image: ${PROJ_NAME}_backend:${IMG_VERSION}
     container_name: ${PROJ_NAME}_worker_${IMG_VERSION}
     command: bash -c "sleep 15 && sh run_task.sh"
     deploy:
