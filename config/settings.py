@@ -38,7 +38,9 @@ else:
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool("DJANGO_DEBUG")
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = env.list('DJANGO_ALLOWED_HOST', default=["*"])
+
+CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', 'http://127.0.0.1']
 
 
 ###############################################################################
@@ -56,6 +58,8 @@ INSTALLED_APPS = [
     'django_filters',
     'corsheaders',
 
+    'drf_spectacular', # Swagger 
+
     # My apps
     'apps.core',
     'apps.auth',
@@ -67,6 +71,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
 ]
 
 ###############################################################################
@@ -260,14 +265,21 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ),
     'DEFAULT_RENDERER_CLASSES': DEFAULT_RENDERER_CLASSES,
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_PAGINATION_CLASS': 'apps.core.pagination.CustomPageNumberPagination',
     'PAGE_SIZE': 10
 }
 
-# if ENVIRONMENT == "dev":
-#     REST_FRAMEWORK["DEFAULT_AUTHENTICATION_CLASSES"] += [
-#         'rest_framework.authentication.BasicAuthentication',
-#     ]
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Your Project API',
+    'DESCRIPTION': 'Your project description',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    # OTHER SETTINGS
+    'SCHEMA_PATH_PREFIX': '/api'
+}
+
 
 
 ###############################################################################

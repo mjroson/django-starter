@@ -6,14 +6,14 @@
 
 1. Copy the environment file
 
-   `cp local.env .env`
+   `cp dev.env .env`
 
 2. Define project name. 
    On .env file define PROJ_NAME.
 
 3. Up project
 
-   `docker-compose up`
+   `docker compose up`
 
 ### Production deploy
 
@@ -29,24 +29,24 @@ Assume you have server and configure dns.
 
 3. Up project
 
-   `docker-compose up`
+   `docker compose up`
 
 ## Utils commands
 
 **Generate graph models**
 More info: https://django-extensions.readthedocs.io/en/latest/graph_models.html
 
-`docker-compose run --rm backend python manage.py graph_models -a -g -o models.png`
+`docker compose run --rm backend python manage.py graph_models -a -g -o models.png`
 
 **Shell plus**
 More info: https://django-extensions.readthedocs.io/en/latest/shell_plus.html
 
-`docker-compose run --rm backend python manage.py shell_plus`
+`docker compose run --rm backend python manage.py shell_plus`
 
 **Django development server plus**
 More info: https://django-extensions.readthedocs.io/en/latest/runserver_plus.html
 
-`docker-compose run --rm --service-port backend python manage.py runserver_plus 0.0.0.0:8000`
+`docker compose run --rm --service-port backend python manage.py runserver_plus 0.0.0.0:8000`
 
 ## Utils resources
 
